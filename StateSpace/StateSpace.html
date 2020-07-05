@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang = "en">
+<head>
+	<meta charset="UTF-8">
+	<title>State Space</title>
+</head>
+
+<body>
+<header>
+	<h1>Outline</h1>
+	<nav>
+		<a href="#StateSpace">State Space</a><br>
+		<a href="#FeedbackControlusingStateSpaceEquations">Feedback Control using State Space Equations</a>
+	</nav>
+</header>
+<hr>
+<div id="StateSpace">
+	<h2>State Space:</h2>
+	<p><b>Dynamic system can be written in differential equations.</b><br>
+	How the system is changing = f(current state)<br>
+	Xd = f(X), actually defines stability for linear systems<br>
+	Xd = f(X,u), where u = inputs, defines how a system changes<br>
+	There are also control techniques that are built on state space models
+	(e.g. Kalman filter, LQR, robust, Model Predictive Control)<br>
+	<i>Xd(t) = [A]X(t) + [B]u(t)</i><br>
+	<i>y(t)  = [C]X(t) + [D]u(t)</i>
+	</p>
+
+	<p><b>What are the state variables?</b><br>
+	minimum set of variables that fully describe the system<br>
+	For the simple string mass example, Initial Conditions:
+	</p>
+	<ol>
+		<li>Is the mass currently moving? we know this from [velocity]</li>
+		<li>How hard is the spring pulling on the mass? spring force = k*[position]</li>
+	</ol>
+	So we have 2 State Variables: position, velocity
+
+	<p><b>Verify numbers of state variables with energy storage</b> (Dr. Hill's explanation)<br>
+	A dynamic system "stores" energy<br>
+	(e.g. spring: potential energy, mass: kinetic energy)<br>
+	(since damper does not store energy, adding damper: b is still a 2nd order system)
+	</p>
+
+	<p><b>Why not two different states?</b> Why position and velocity?<br>
+	State variables are the coordinates within the state space.<br>
+	So it can be changed!<br>
+	We can describe the same state with any linearly-independant variables.<br>
+	<img src = "Figures/StateSpaceTrans.png" width = "700" alt = ""><br>
+	We do this often, for example diagonalizing the [A] matrix into so-called "modal form"<br>               <img src = "Figures/ModalForm.png" width = "700" alt = "">
+	</p>
+</div>
+
+<hr>
+<div id="FeedbackControlusingStateSpaceEquations">
+	<h2>Feedback Control using State Space Equations:</h2>
+	<p><b>Pole Placement/Full State Feedback method</b><br>
+	<img src = "Figures/PolePlaceBDM.png" width = "700" alt = "">
+	</p>
+
+	<p><b>A controller has to modify [A] to change dynamics</b><br>
+	eigenvalues(A) = poles of the system, where the location dictates stability<br>
+	KEY to pole placement method:
+	generate the required close-loop stability, by moving the poles<br>
+        <img src = "Figures/EigenTransOfA.png" width = "700" alt = ""><br>
+	Xd = [A]X -eigenvector transform-> Zd = [A_bar]Z,<br>
+	(e.g. [A] = [[0 1],[2 -1]], [A_bar] = [[-2 0],[0 1]])<br>
+	[A_bar] is diagonal matrix!, So<br>
+	<i>Z1d = -2Z1</i><br>
+	<i>Z2d = Z2</i><br>
+	it becomes functions of its "own" state, decoupled!<br>
+	And the solution becomes: Zn = C*exp(eigenvalue*t)<br>
+	<img src = "Figures/ZnSol.png" width = "700" alt = "">
+	</p>
+
+	<p><b>Review the block diagram of pole placement</b>
+	u = r*kr - k*x<br>
+	plug u into the state equation, we get<br>
+	<i>Xd = [A]x + [B](r*kr-k*x)</i><br>
+	<i>Xd = [A-B*k]X + [B]*r*kr</i><br>
+	[A-B*k] is the closed-loop [A] matrix,<br>
+	by design the k, we can move the eigenvalues of the closed-loop A matrix!<br>
+        <img src = "Figures/AclDesignEX.png" width = "700" alt = "">
+	</p>
+
+	<p><b>MATLAB example:</b><br>
+	<code>
+	A = [0 1; 2 -1];<br>
+	B = [1; 0];<br>
+	C = [1 0];<br>
+	D = 0<br>
+
+	sys = ss(A, B, C, D)<br>
+	E = eig(A), %shows E = 1,-2<br>
+
+	% Desired closed loop eigenvalues<br>
+	P = [-2 -1];<br>
+
+	% Solve for K using pole placement<br>
+	K = place(A, B, P);<br>
+
+	% Check for closed loop eigenvalues<br>
+	Acl = A-B*K;<br>
+	Ecl = eig(Acl) %shows Ecl = -1, -2<br>
+
+	% Create closed loop system & compare<br>
+	syscl = ss(Acl, B, C, D)<br>
+	step(sys,syscl)</code><br>
+
+	The step response of sys is unstable as predicted<br>
+	The step response of syscl is stable<br>
+	However, it's not perfect, the steady state output is only 0.5<br>
+	This is where the reference scaling term: kr comes in<br>
+	If the steady state of step responce is only 0.5,<br>
+	Why not just double the input by setting kr = 1/(steady state value)?
+	</p>
+
+	<p><b>Solve for kr</b><br>
+	<code>
+	kdc = dcgain(syscl) % kdc = 0.5<br>
+	kr = 1/kdc<br>
+
+	% Create scaled input closed loop system<br>
+	syscl_scaled = ss(Acl, B*kr, C, D)<br>
+	step(syscl_scaled)</code><br>
+	</p>
+
+	<p><b>Thinks</b></p>
+	<ol>
+		<li>Pole placement is fancy root locus:
+		we have gain matrix that gives us the ability to move the poles anywhere in the complex plane.</li>
+		<li>A 2-state pole placement is similar to PD control:<br>
+		<figure>
+                        <img src = "Figures/2-StatePolePlaceANDPDControl.png"
+                        width = "700" alt = "">
+		</figure></li>
+		<li>Where should we place the eigenvalues?<br>
+		If we have a high-order system, keep two poles closer to the imaginary axis than others, so that it behaves like a 2nd order system.<br>
+		If we try to move a bunch of eigenvalues really far left to get the fast response, more gain needed and more acuator effort.<br>
+		<figure>
+                	 <img src = "Figures/EigenPlace1.png"
+                        width = "700" alt = "">
+                </figure>
+		<figure>
+                        <img src = "Figures/EigenPlace2.png"
+                        width = "700" alt = "">
+                </figure></li>
+		<li>Full-state feedback is a misnomer:<br>
+		We can't feed back every state of a real system.<br>
+		(e.g. flexible structure means additional states, but we may choose to ignore those states in our model and develop feedback controller assuming a rigid system.<br>
+		KEY! Feed back critical states to the design, so the controller will still work on the real hardware)</li>
+	</ol>
+</div>
+</body>
+</html>
