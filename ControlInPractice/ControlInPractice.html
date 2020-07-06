@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang = "en">
+<head>
+	<meta charset="UTF-8">
+	<title>Control In Practice</title>
+</head>
+
+<body>
+<header>
+	<h1>Outline</h1>
+	<nav>
+		<a href="#section1">Linear Parameter Varying system</a><br>
+		<a href="#section2">Feedfoward Control</a><br>
+		<a href="#section3">Non-Minimum Phase System</a><br>
+		<a href="#section4">4 Ways to Implement Transfer Function In Code</a><br>
+	</nav>
+</header>
+
+<hr>
+<div id="section1">
+	<h2>Linear Parameter Varying system (LPV):</h2>
+	<p>The parameters of the plant's transfer function change in operation.<br>
+	For example, the pitch control of an aircraft.<br>
+	The transfer funtion of [pitch angle/ elevator angle] changes as the flying condition changes.<br>
+	So, the linear controller that works so well in a single operating condition probably won't work at other conditions.<br>
+	Gain Scheduling: change gain of the linear controller<br>
+	<img src = "Figures/LPVSystem.png" width = "700" alt = ""><br>
+	</p>
+
+	<b>Implementation</b><br>
+	<ol>
+		<li>Linearize plant at each design operating condition</li>
+		<li>Tune gains at each design point, (performance is only gaurantee at the design condition) </li>
+		<li>Choose the scheduling architecture,	(transient-free switch)</li>
+		<li>Assess the control performance, often doen in simulation environment, all critical transitions and corner cases should be covered</li>
+	</ol>
+</div>
+
+<hr>
+<div id="section2">
+		<h2>Feedforward Control:</h2>
+		<p>
+		can be used to remove a lot of the setpoint and disturbance error before it ever gets to the controller.<br>
+		Only noise error is left.<br>
+		Set the bandwidth to ignore the noise.<br>
+		</p>
+
+		<p>
+		<b>How can feedforward control remove setpoint error?</b><br>
+		If you know the setpoint is going to change, why let it create error in the system first,<br>
+		and then have that feedback controller respond and generate the necessary controller output second.<br>
+		Why not predict, ahead of time, what controller output is required based on your knowledge of the setpoint change.<br>
+		</p>
+		<p>
+		<b>What are the information needed to accomplish this?</b><br>
+		Since R(s) = Y(s) = u(s)*G(s)<br>
+		u(s) = R(s)/G(s) = R(s)*G-1(s),<br>
+		where R(s) is the setpoint; G-1(s) is the required feedforward controller.<br>
+		If we had a perfect model, which is invertible,<br>
+		then we can adjust our controller output with our feedforward term. G-1(s)<br>
+		However, G-1(s) may not be perfect; or G-1(s) may not be possible.<br>
+		<img src = "Figures/FeedfowradControl.png" width = "700" alt = "">
+		</p>
+		<p>
+		<b>G-1(s) is impossible for the example of system with delay.</b><br>
+		Which means to "predict" the change of the setpoint.<br>
+		So rather than invert the dynamic exactly, we usually try to "fit" a causal and realizable model to G-1(s).<br>
+		It is therefore impossible to completely remove the setpoint error<br>
+		<img src = "Figures/G-1Impossible.png" width = "700" alt = ""><br>
+		<code>Example MATLAB Command: openExample('control/heatexdemo')</code>
+		</p>
+</div>
+
+<hr>
+<div id="section3">
+	<h2>Non-Minimum Phase System:</h2>
+	<p>
+	We can create transfer function with same bode Magnitute, but different bode phase.<br>
+	For example: G(s) = (s+2)/(s^2+3s+1)</p>
+	<ol>
+		<li>adding delay, G_delay(s) = exp(-1s)*G(s)</li>
+		<li>move LHP zero to RHP: G_RHP_zero(s) = (-s+2)/(s^2+3s+1)</li>
+	</ol>
+		<p>For this given magnitude response,<br>
+		Minimum Phase: G(s)<br>
+		Non-minimum Phase: G_delay(s), G_RHP_zero(s)<br>
+		To see the step response of these three systems,<br>
+		<img src = "Figures/NonMinStepResponse.png" width = "400" alt = "">
+		</p>
+
+		<b>Real systems with RHP zeros:</b>
+		<ol>
+			<li>Airplane pitch, as the elevator deflects up, the airplane needs to first move downward, and then the pitch angle is increased.<br>
+			<img src = "Figures/PlanePitchRHP.png" width = "700" alt = ""></li>
+			<li>Controller of the Inverted Pendulum (openExample('control/InvertedPendulumExample')<br>
+				To move the inverted pendulum car rightward to a place, the car needs to move leftward first.</li>
+		</ol>
+		<p>
+		<b>Why does a RHP zero cause this behavior?</b><br>
+		By breaking the G(s) into 2 parts: (s+2) and 1/(s^2+3s+1)<br>
+		the numerator part modifies the input u(t) by: 2 times the input signal, then "adding" the derivative.<br>
+		So, if there are RHP zero, the first part becomes (-s+2).<br>
+		Then the numerator part modifies the input u(t) by: 2 times the input signal, then "subtracting" the derivative.</p>
+
+		<b>Why is it harder to control RHP zero systems?</b>
+		<ol>
+			<li>Moving in the wrong direction first slows down the response</li>
+			<li>Increasing the controller gain (to increase the response) can make it unstable!<br>
+				(e.g. Airplane pitch example. Let's say we want the plane to move upward, so we deflects the elevator angle up.<br> As soon as the elevator deflects up, the altitude drops. <br>The high response controller recognize the altitude drop, commanding more deflect angle of the elevator, which brings the airplane down further.<br> Eventually the airplane altitude drops, with a high pitch angle, UNSTABLE!)</li>
+		</ol>
+		<b>What can we do about this?</b> lower controller gain to maintain stability
+</div>
+
+<hr>
+<div id="section4">
+	<h2>4 Ways to Implement Transfer Function In Code</h2>
+	The accuracy of our code depends on
+	<ol>
+		<li>sample time</li>
+		<li>Integration and differentiation methods</li>
+
+	</ol>
+
+	<p><b>Method 1: Numerically solve the differential equations</b><br>
+	For example,<br>
+	<i>G(s) = Y(s)/U(s) = (s+2)/(s^2+s+2)</i><br>
+	<i>(s^2+s+2)Y(s) = (s+2)U(s)</i><br>
+	<i>y_2dot(t) + y_dot(t) + 2y(t) = u_dot(t) + 2u(t)</i><br>
+	<i>y_2dot(t) = u_dot(t) + 2u(t) - y_dot(t) - 2y(t)</i><br><br>
+	Basic Idea:<br>
+	<code>
+	1st time step:<br>
+	initial conditions[ud, y, yd = 0, u = input]<br>
+	ydd = ud + 2u - yd -y<br>
+	2cd time step:<br>
+	yd = integral(ydd)<br>
+	y = integral(yd)<br>
+	u = input<br>
+	ud = derivative(u)<br>
+	ydd = ud + 2u -yd -y</code>
+	</p>
+
+	<p><b>Method 2: convert to a state space model (only integrate the state vector once)</b><br>
+	s-domain(transfer function) to time-domain(state space)<br>
+	covert by MATLAB: G(s), sys == ss(G)<br>
+	State equation: X_dot(t) = [A]X(t) + [B]u(t)<br>
+	Output equation:y(t) = [C]X(t) + [D]u(t)<br><br>
+	Basic idea:<br>
+	<code>
+		1st time step:<br>
+		X(0) = [0], u = input<br>
+		X_dot = [A]X0 + [B]u<br>
+		y = [C]X0 + [D]u<br>
+		2cd time step:<br>
+		X = integral(X_dot)<br>
+		u = input<br>
+		X_dot = [A]X + [B]u<br>
+		y = [C]X +[D]u<br>
+	</code>
+	</p>
+
+	<p><b>Method 3: convert to z-domain, discretize the transfer function</b><br>
+	<code>MATLAB: Gz = c2d(G, ts, 'tustin'); Gz.variable='z^-1'</code><br>
+	(tustin is the discretize method which similar to trapazoidal integral 2nd order)<br>
+	Then take inverse Z-transform to get the discrete time-domain equation. (easly done by hand)<br>
+	<img src = "Figures/InverseZTrans.png" width = "700" alt = ""><br>
+	Don't need to code any integral, since it is already taken care in the Z-transform process
+	</p>
+
+	<p><b>Method 4: Autocode from MATLAB/Simulink</b></p>
+	<p>If you have a controller or a filter that you designed as a continuous function and you want to build C code or other code that is going to run on some other target hardware, hopefully you find one of these four methods helpful.</p>
+</div>
+</body>
+</html>
