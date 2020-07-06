@@ -13,6 +13,7 @@
 		<a href="#section2">Feedfoward Control</a><br>
 		<a href="#section3">Non-Minimum Phase System</a><br>
 		<a href="#section4">4 Ways to Implement Transfer Function In Code</a><br>
+		<a href="#section5">Gang Of Six Transfer Functions</a><br>
 	</nav>
 </header>
 
@@ -170,5 +171,76 @@
 	<p><b>Method 4: Autocode from MATLAB/Simulink</b></p>
 	<p>If you have a controller or a filter that you designed as a continuous function and you want to build C code or other code that is going to run on some other target hardware, hopefully you find one of these four methods helpful.</p>
 </div>
+
+<hr>
+<div id="section5">
+	<h2>Gang of Six Transfer Functions</h2>
+	<p>
+	<b>For a Feedback control, need to look beyond the Y/R transfer funtion</b><br>
+	To fully understand how a feedback system behaves, we actually need to look at four different transfer functions. <br>
+	PC/1+PC, P/1+PC, C/1+PC, 1/1+PC, (PCF/1+PC, CF/1+PC, F for feedforward) <br>
+	And if our system has a feedforward path, then this expands to six.<br>
+	<img src="Figures/GangOfSix.png" width="700" alt=""><br>
+	PC/1+PC: complementary sensitivity function<br>
+	1/1+PC: sensitiviy function<br>
+	C/1+PC: noise sensitiviy function<br>
+	P/1+PC: disturbance sensitivity function<br>
+	</p>
+
+	<p>
+	<b>Quanser Motor-Pendulum Example</b><br>
+	<img src="Figures/QuanserBDM.png" width="900" alt=""><br>
+	reference: rotoray arm angle (+/- 45 degree step signal, switch after 10 sec)<br>
+	y: rotoray arm angle<br>
+	u: commanded motor input voltage<br>
+	disturbance: free rotating pendulum attached on rotoray arm<br>
+	(the pendulum oscillates at nearly a fixed frequency, it's natural frequency, and that oscillation causes a disturbance on rotary arm itself.)<br>
+	</p>
+	<p>
+	1st run, C: PD contorller <br>
+	<img src="Figures/1Run.png" width="900" alt=""><br>
+	We can see how the disturbance effects the system, large oscillations.<br>
+	</p>
+
+	<p>
+	The reason the pendulum is oscillating is not because of some external force acting on it, but because our controller itself is driving the rotary arm at a frequency that is exciting the pendulum, or adding energy into that mode.<br>
+	One way we may try to combat this is to add a notch filter in series with the controller. Basically, by doing this, we’re not letting the controller change the voltage at the natural frequency of the pendulum, which in our case is about 9.7 rad/s. <b>If we don’t command the arm at this frequency, then we shouldn’t add any energy into the pendulum. Let’s try it out.</b>
+	</p>
+
+	<p>
+	2cd run, C: notch filter(wn = pendulum natural frequency) * PD controller<br>
+	<img src="Figures/2Run.png" width="900" alt=""><br>
+	The oscillation of the pendulum is reduced.<br>
+	Overshoot occurs! because we've changed C, so the whole system stability is changed.<br>
+	By retuning the gain, we're able to reduce the overshoot.<br>
+	</p>
+
+	<p>
+	A New Problem of Adding Notch Filter:<br>
+	The controller itself doesn’t add energy into the pendulum, great, but that also means it can’t remove energy.<br>
+	If an "external force" causes the pendulum to oscillate, our controller won’t be able to damp out that motion.<br>
+	Let's say an external force causes the pendulum to oscillate at its natural frequency.<br>
+	The pendulum acts on the rotary arm, causing it to oscillate at the same frequency.<br>
+	However, this "natural frequency" angle error is removed by the notch fileter.<br>
+	So the controller doesn't see it; It doesn't react to it.<br>
+	</p>
+
+	<p>
+	By moving the notch filter into the feedforward path,<br>
+	We're removing the troublesome frequency from our "step command", but not impacting the whole feedback system.<br>
+	(note: feedfoward path only shows up in the reference transfer function)<br>
+	</p>
+	<p>
+	3rd run, C: PD control; F: Notch Filter<br>
+	<img src="Figures/3Run.png" width="900" alt=""><br>
+	Step input changes to r*F, back and forth dance at the beginning.<br>
+	(The reference steps very fast at the beginning to get the arm moving, then swings back to stop the motion of the pendulum, and then comes back again to keep the arm moving.<br>
+	So, it’s this backward motion that is effectively keeping the pendulum from moving while still allowing the arm to step to the commanded angle.)<br>
+	Pendulum oscillation is also reduced.<br>
+	For this example, notch filter in the feedforward path can still respond to and reject "external" disturbances. Has better disturbance rejection.<br>
+	</p>
+</div>
+
+
 </body>
 </html>
