@@ -9,12 +9,14 @@
 <header>
 	<h1>Outline</h1>
 	<nav>
-		<a href="#StateSpace">State Space</a><br>
-		<a href="#FeedbackControlusingStateSpaceEquations">Feedback Control using State Space Equations</a>
+		<a href="#section1">State Space</a><br>
+		<a href="#section2">Feedback Control using State Space Equations</a><br>
+		<a href="#section3">Controlability and Observability</a><br>
+		<a href="#section4">Linear Quadratic Regulator</a><br>
 	</nav>
 </header>
 <hr>
-<div id="StateSpace">
+<div id="section1">
 	<h2>State Space:</h2>
 	<p><b>Dynamic system can be written in differential equations.</b><br>
 	How the system is changing = f(current state)<br>
@@ -52,7 +54,7 @@
 </div>
 
 <hr>
-<div id="FeedbackControlusingStateSpaceEquations">
+<div id="section2">
 	<h2>Feedback Control using State Space Equations:</h2>
 	<p><b>Pole Placement/Full State Feedback method</b><br>
 	<img src = "Figures/PolePlaceBDM.png" width = "700" alt = "">
@@ -151,5 +153,108 @@
 		KEY! Feed back critical states to the design, so the controller will still work on the real hardware)</li>
 	</ol>
 </div>
+
+<hr>
+<div id ="section3">
+	<h2>Controlability and Observability</h2>
+	<p>
+	From the higher control design level, actuators impart control forces and enegy to the system; sensors measure the states of the system.<br>
+	Controller design comes down to figuring out how to use the sensor data along with a reference signal or some kind of command to generate the correct actuator commands.<br>
+	However, controller design is bound to fail if your system doesn’t have the appropriate actuators that can affect the right parts of the system, or if you don’t have the appropriate sensors in place that can measure the right states.<br>
+	Without both of those, you won’t be able to adequately influence the system, it won’t be controllable, or you won’t know how the system is changing; it won’t be observable.<br>
+	In this way, controllability and observability are conditions of how the system works with the actuators and sensors, and it’s not tied to a specific control technique like PID or pole placement.<br>
+	If it's uncontrolabil, change the system or acuator; If it's unobservable, change system or sensor.
+	</p>
+	<p>
+	<b>Definition</b><br>
+	Controlability: there exist control signals which allow the system to "reach" any state in a finite amount of time. (note: need not to maintain the state)<br>
+	Observability: all "critical" states can be known from the system outputs. (note: impractical to know every state)<br>
+	</p>
+	<p>
+	<b>Car Example</b><br>
+	<i>Xd = [A][px; py; pxd; pyd; yaw; yawd] + [B][steearing pedals]</i><br>
+	<i>Y = [C][px; py; pxd; pyd; yaw; yawd] + [D][steering pedals</i><br>
+	Remove all sensors info. by closing our eyes, it means [C] = 0, but he can still control the car with [B] being not null.<br>
+	Remove the steering and padals (imagine the car drives on ice), [B] = 0. The driver can't affect the state of the system, but can still observe the state (how crazy the car is moving!)
+	</p>
+	<p>
+	<b>What does it mean to observe (know) a state</b><br>
+	We can mearsure it, Or we can estimate it using available info. (e.g. velocity is d(position)/dt; vice versa.)<br>
+	Estimating states can be highly sensitve to modeling and measurement errors<br>
+	Balance the tradeoff: Which states should be measured? and which states should we estimate?<br>
+	The answer can be found analytically<br>
+	</p>
+	<p>
+	<b>Consider a Flexible Cantilevered Beam</b><br>
+	We have a package of accelerator (sense position) and spring (acutator to damp the bending).<br>
+	So where should we place it?<br>
+	The bending motion of a flexible cantilevered bean is a combination of a number of distinct bending modes.<br>
+	Consider observability, we should not place the package on the "node" of any bending modes (since the node point doesn't move)<br>
+	Consider Controlability, we should place the package away from the wall, larger torque can be generated, lighter acuator<br>
+	</p>
+
+</div>
+
+<hr>
+<div id="section4">
+	<h2>Linear Quadratic Regulator</h2>
+	<p>
+	LQR is a type of "optimal control" based on the state space. <br>
+	Has same structure as Pole Placement; Full state feedback. <br>
+	<b>But, how we choose K is different </b><br>
+	LQR doesn't choose pole location, it find the optimal K by choosing close-looped characteristic.
+	</p>
+	<p>
+	<b>What is Optimal?</b><br>
+	Build a cost function, by setting the weight of Q and R based on our preference.<br>
+	The optimal solution is the choice with min. cost.<br>
+	This is the same reasoning with control systems. <br>
+	Balance of "performance" and "actuator effort ($$, energy it takes)" <br>
+	<img src="Figures/OptimalChoice.png" width="700" alt=""><br>
+	How LQR finds the optimal gain? <br>
+	Build cost function; Return Gain K.<br>
+	<img src="Figures/LQRlogic.png" width="700" alt=""><br>
+	</p>
+	<p>
+	<b>LQR Cost Function</b><br>
+	<i>J = integral(XT*Q*X+uT*R*u)dt, t = 0-inf.</i><br>
+	Penalize bad performance by adjusting Q; Penalize actuator effort by adjusting R<br>
+	the integral of XT*Q*X calculates the area sqaure of the response of initial state to 0 state.<br>
+	Smaller area square means better performance. <br><br>
+	Q is a matrix of nxn. n is the length of state vector. <br>
+	[Q] is diagonal. If one of the state performance is crucial, penalize it by increasing the corresponding Qn.<br>
+	[R] is similar. If one of the actuator is expensive, penalize it by increasing the corresponding Rn.<br>
+	(e.g. thruster of satellite control) <br><br>
+	Re-write the cost function:<br>
+	<i>J = [XT uT][[Q 0],[0 R]][X; u]</i><br>
+	Anotehr form of cost function: <br>
+	<i>J = integral(XT*Q*X+uT*R*u+2XT*N*u)dt, t = 0-inf.</i><br>
+	<i>J = [XT uT][[Q N],[NT R]][X; u]</i><br>
+	N penalizes the cross product of X and u
+	</p>
+	<p>
+	<b>How to Solve this Opt. Problem?</b><br>
+	1. Develop a linear model<br>
+	<i>Xd = [A]X+[B]u</i><br>
+	<i>Y = [C]X+[D]u</i><br>
+	2. Adjust Q and R <br>
+	3. Find the optimal gain set K <br>
+	<code>
+	MATLAB:	K = lqr(A,B,Q,R)<br>
+	</code>
+	4. Simulate the response, (return 2. step to return Q and R if necess.) <br><br>
+	With LQR, we don't place poles. We tune Q and R. <br>
+	How do we tune them? <br>
+	Start with Identity matrix, tweak based on intuition and knowledge of the system. <br>
+	</p>
+	<p>
+	<b>UFO in No Gravity Example</b><br>
+	The code first build the closed-loop system, using LQR gain Matrix.<br>
+	Then simulate the closed-loop system response to the initial condition. <br>
+	It counts the time and fuel usage, where fuel usage is proportional to the integral of acceleration. <br>
+	<a href="../codes/ufo_rotate.m"><code>ufo_rotate.m</code></a>
+	</p>
+</div>
+
 </body>
 </html>
