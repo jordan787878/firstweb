@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang = "en">
+<head>
+	<meta charset="UTF-8">
+	<title>PID</title>
+</head>
+
+<body>
+<header>
+	<h1>Outline</h1>
+	<nav>
+		<a href="#section1">Integral Windup</a><br>
+		<a href="#section2">Derivative with Filter</a><br>
+		<a href="#section3">PID Tuning Guide</a><br>
+		<a href="#section4">Model-based PID Model</a><br>
+		<a href="#section5">Gains Tuning</a><br>
+		<a href="#section6">Cascaded Loops</a><br>
+
+	</nav>
+</header>
+
+	<div id="section1">
+		<h1>Integral Windup</h1>
+		<p> When the actuator saturates, (e.g. when the actuator can't follow a given commend) <br> Integral windup occurs! <br>
+		Because the integrator keeps adding up the error during saturation period, the actuator signal can't decrease as soon as the error switch signs.<br>
+		<img src="Figures/IntegralWindup.png" width="700" alt="">
+		</p>
+		<p>
+		Integrator anti-windup method: actuator signal can decrease as soon as the error switch signs. <br>
+		Clamping - turing the integrator off (conditional integrator): add a turnoff switch before the integrator, which is trggerd bt AND logic of 2 check paths. <br>
+		1 path - Check if the output is saturating. (by setting a clamping saturation limit block) <br>
+		2 path - Check if the error is the same sign as the controller output <br>
+		(Note: set controller saturation limit "lower" than real actuator limit) <br>
+		<img src="Figures/Clamping.png" width="700" alt="">
+		</p>
+	</div>
+	
+	<hr>
+	<div id="section2">
+		<h1>Derivative with Filter</h1>
+		<p>
+		Noise is unavoidable to sensors. Measure state = True State + noise.<br>
+		Derivative controller could magnify the amplitude of the tiny noise, and impact our system. <br>
+		<img src="Figures/NormalSignal.png" width="700" alt="">
+		<img src="Figures/HighFreqNoise.png" width="700" alt="">
+		</p>
+
+		<p>
+		We can apply a filter that will block frequencies above a certain point from entering our derivative. (the certain point of freqeuncy: cutoff frequency). <br>
+		Add a 1st order low pas filter before the Derivative controller: Wcut/(s+Wcut) <br>
+		(Magnitude of Noise v.s. Frequency plot) <br>
+		<img src="Figures/MagNoise.png" width="700" alt=""><br>
+		</p>
+
+		<p>
+		Sometime we implement the controller in code in another form, to increase the efficieny, reduce the memory usage. <br>
+		Another form of low-pass filter + derivative is: An integral in the feed back path. <br>
+		<img src="Figures/1Form.png" width="400" alt=""><br>
+		<img src="Figures/2Form.png" width="400" alt=""><br>
+		</p>
+	</div>
+	
+	<hr>
+	<div id="section3">
+		<h1>PID Tuning Guide</h1>
+		Work Flow of Controller Design: <br>
+		<img src="Figures/Workflow.png" width="700" alt=""><br>
+		PID tuning flow chart: <br>
+		<img src="Figures/TuneGuide.png" width="700" alt=""><br>
+	</div>
+
+	<hr>
+	<div id="section4">
+		<h1>Model-based PID Model</h1>
+		<img src="Figures/PIDforDCmotor.png" width="700" alt=""><br>
+		How to generate model of the plant? <br>
+		<ul>
+			<li>derive the equations directly (note: might be non-linear or linear)</li>
+			<li>take input and oupt data from real plant, and use System Identification to fit that data</li>
+			<li>linearize our non-linear model around our operating point</li>
+		</ul>	
+	</div>
+
+	<hr>
+	<div id ="section5">
+		<h1>Gains Tuning</h1>
+		<p> To get the inital guess of the PID gains, we can use 2 methods. <br>
+		1. Pole placement: use root locus, so that the closed-loop poles meet the requirement. <br>
+		2. Loop Shaping: shape the open-loop bode plot, to get the required closd-loop freqeuncy characteristic.<br>
+		<p>
+
+		<p>
+		After tuning the PID gains, make sure to check the controller output signal: u, so that the cmd is appropriate.(e.g. not to high over the max. limit of the physical model.) <br>
+		Add clamping to the PID controller (to deal with saturation problem). <br>
+		</p>
+	</div>
+
+	<hr>
+	<div id="section6">
+		<h1>Cascaded Loops</h1>
+		<p>
+		Take drone altitude control for example. At the outer loop, we have one altitude PID to control the propeller (input: reference altitude, output: propeller speed cmd). Meanwhile, the propeller also has a inner PID to control the motor speed (input: propeller speed cmd, ouput: voltage cmd to the motor). <br>
+		These are cascaded loops or nested loops. The outer loop drives the set point of the inner loop, and the inner loop affects the feedback path of the outer loop.<br>
+		<img src="Figures/CascadedLoop.png" width="700" alt="">
+		</p>
+
+		<p>
+		Why cascaded loops? (e.g. why not design a single PID to controller the cmd motor voltage directly? [input: reference altitude, output: cmd motor voltage])<br>
+		1. easier to isolate problems.<br>
+		2. can distribute work to multiple teams. (e.g. the motor you buy might have a built-in contoller)<br>
+		3. can address different source of disturbance, noise, or error. <br>
+		-  The inner loop can be tuned to respond quickly to local disturbances <br>
+		-  The outer loop can be tuned more conservatively to reject sensor noise and increase stability <br>
+		(e.g. let's say we have a sudden voltage drop in the motor. If the inner loop PID is fast enough to respond and recover the motor speed, then the motor distances would no be seen by the outer loop. This allows the outer loop to respond only to slow disturbances like wind gust.<br>
+		If we have only a single loop, then the single PID has to sense that tiny change of altitude due to sudden voltage drop. But it will also quickly respond to altitude sensor noise!) <br>
+		</p>
+
+		<p>
+		How to tune them? <br>
+		Case 1. If the inner loop is much faster than the outer loop (bandwith 5-7 times higher): <br>
+		possible to tune them separately. <br>
+		(e.g. Tune the motor PID first, and make sure the propeller speed quickly follows the propeller speed cmd. <br>
+		To tune the outer loop, we can assume that the inner loop doesn't exist, and that the cmd of propeller speed just goes straight through.) <br>
+		In this way, you are actually tuning two single loops. <br><br>
+
+		Case 2. If the inner loop operates about the same bandwith as the outer loop: <br>
+		We can't assume that the inner loop is fast enough to be instantaneous. Now the inner loop performance does affect the outer loop. <br>
+		To tune this system, we can use iterative method, state space method, or autotune tools.<br>
+		</p>
+	</div>
+</body>
+</html>
+
