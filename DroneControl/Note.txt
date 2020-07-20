@@ -1,0 +1,133 @@
+~Part 1
+drone hardware: Parrot Minidrone
+
+sensors: 
+1. ultrasound - distance above a surface
+2. camera - use a optical flow methond to determine drone's horizonal motion and speed
+3. pressure sensor - altitude.
+4. IMU - acceleratiob, angular rate.
+
+actuators:
+4 propellers, X-configuration.
+Propellers in same diagonal spins in the same direction.
+So that thrust, roll, pitch, and yaw can be commanded independently.
+(Command one motion without affecting the others)
+
+Overview of Control Problem:
+Manipulate motor speed precisely to maneuver drone in 3D space.
+
+This is an underactuated system: 4 motors for 6 degree of freedom
+3 translational directions: up/down, left/right, forward/backward
+3 rotational directions: roll, pitch, yaw
+
+~Part 2: control system architecture
+Motor Mixing Algorithm:
+Motor_fr = Thrust_cmd + Yaw_cmd + Pitch_cmd + Roll_cmd
+Motor_fl = Thrust_cmd - Yaw_cmd + Pitch_cmd - Roll_cmd
+Motor_br = Thrust_cmd - Yaw_cmd - Pitch_cmd + Roll_cmd
+Motor_bl = Thrust_cmd + Yaw_cmd - Pitch_cmd - Roll_cmd
+
+Moving forward/backward, left/right are unactuated motions:
+Need to first rotate to an angle, so that the thrust vector is partially in the gravity direction, and partially in the commanded direction.
+
+For our "hovering drone", we assume the roll and pitch angles are small to thrust only affects altitude.
+For "racing drone", extreme roll and pitch angles are necessary, so the thrust is coupled with altitude and horizontal speed.
+
+Now, let's assume our "altitude controller" as a PID controller.
+Consider wind gust disturbane, the drone will roll and move horizontally.
+We need to keep the roll and pitch angles zero, for hovering.
+So we shall add three other PID controller.
+*See figure: 4PIDforHover
+
+Still not prefect! The drone may drift away from it's original position, during the recovering of the roll/pitch angles due to wind gust.
+The drone may walk away slowly!
+There's nothing in our control architecture to bring our drone back to the starting position.
+
+Re-think! roll/pitch angles may be non-zero in order to hover at the starting position in the strong wind gust!
+Maintain zero is not good enough!
+So, rather than "level fly", we need "ground position controller".
+Add a position controller: input: position error; output: roll and pitch angles.
+These angles are the referecne roll and pitch angles! (rather than 0 in the previous control architecture)
+Position controller is the outer loop. (cascaded loops)
+
+The yaw angle also feeds into the position controller, to find the "Heading" of the drone.
+*See figure: PosControl
+
+Problems to solve:
+1. Get required States: yaw, roll, pitch, altitude, XY position
+2. Tune 6 PID controller that all interact with each other
+
+~Part 3: code control logic
+option 1: write c code, compile to binary file, and load to Minidrone firmware
+option 2: dev. flight controller in SIMULINK, autocode into C code, and compile/load to drone.
+
+Because flight controller is just a small part in flight code.
+So we use: Simulink Support Package for Parrot Minidrones.
+And only replacing the flight control software.
+*See figure: FlightCode
+
+We also need State Estimator block: to convert measurement to states we needed.
+(e.g. convert air pressure to altitdue)
+We also need Facult Protection block: shutdown the drone if needed.
+We also need Data logging: since we use SIMULINK, store data .mat file locally on the drone, and then download it to MATLAB after the flight?
+
+USE: Aerospace Blockset
+# asbQuadcopterStart
+*See figure: asbQuadcopter
+FCS block is the flight code, everything else is used for simulation the real world.
+? MATLAB series: Understanding Kalman Filters, Part 1: Why use Kalman Filters?
+(https://www.mathworks.com/videos/series/understanding-kalman-filters.html?s_tid=srchtitle)
+
+So far, we modify the flight code, and load it to the drone firmware.
+By pressing start of the Parrot Minidrone GUI, we can see how our control system work on the real drone, real world.
+*See figure: Part3Work
+
+~Part 4: how to build a model for simulation
+Model-based design work flow:
+* See figure: Workflow
+
+We use high fidelity non-linear model for simulation
+We use low fidelity linear model for tuning the controller.
+
+Model block can be divided into sub-models:
+actuators, airframe, environment, and sensors.
+* See figure: SubModels
+
+~# asbQuadcopterStart
+~MATLAB/projects/example/asbQuadcopter1
+
+In the Command block: Position/Attitude Reference use "signal editor block" by default.
+The signal editor read mainModel/positionAttitudeRef.mat file as input signal.
+
+change 1: change the cmd Z signal from 6 points to 4 points (t,z) = (0,0),(1,0),(1,-1),(100,-1)
+add 1: add scope for Z, in the flight controller/gravity feedforward... block
+find 1: Extreme overshoot (3.5 timex!)
+think 1: now the cmd signal is an unit step input at t = 1 sec. But the drone starts rising at t =0 sec. This is because of the feedforward loop, which generates a non-zero input at t= 0 sec! So I first try to delete the feedforward loop.
+
+change 2: delete the feedfoward loop.
+error 1: floor contact assertion.
+find 2: From the World Z scope in Visualization/Extract Flight Instruments, know the drone is originally rest in 71.32. Then it rockets up to 73.5 m in 1 second. Truely, it is due to the feedforward loop!
+
+change 3: So I add a delete takeoff_gain after the takeoff_gain loop, so that from t = 0 to 1 sec, the drone has a equal thrust and weight to stay on the ground.
+find 3: It works! Now th altitude plot looks "normal". No extreme overshoot!
+think 2: But I still wan't a better solution. So maybe I can generate a equal force to the drone while it is in contact with the floor.
+
+find 4: However, as the cmd Z set to -2.2 high, the drone becomes unstable and crash! It seems likt something went wrong in the pitch controller.
+* See figure: PitchRollError
+change 4: I try to tune the PID gain of the pitch controller, the pitch error does change. But still unstable as time increases.
+
+find 5: I find the pitch_roll_cmd itself is unstable!!! 
+change 5: So instead of letting the controller to set the reference pitch/roll angle, I manually set the pitch/roll cmd to [0.0,0.0]. And now the drone won't oscillate in the pitch direction!
+
+find 6: But, the drone will drift backward slowly due to the wind gust disturbance, and since the roll/pitch angle is set to 0.0, it have no idea to come back to its starting XY position.
+* See figure: XYError.
+So something must be wrong in the "outer loop" of the pitch/roll PD control.
+change 6: So I change the PD gains of the outer loop from P:0.24 to 0.06, D:0.1 to 0.75. And it works!!!
+
+find 7: However, it's stable only if the cmd Z is from -1 to -2.7. At -3, the drone is unstable again...
+change 7: So I keep tuning the PD gains of the outer loop. P:0.06 to 0.025, D:0.75 to 0.04. Not the pitch/roll and XY position is stable when cmd is (-1 to -5.5)
+* See figure: XYErrorBefore, XYErrorAfter
+
+find 8: However, not the altitude is oscillating! (cmd Z = -5.5). Time to tune the altitude gains!
+* See figure : Z5.5
+

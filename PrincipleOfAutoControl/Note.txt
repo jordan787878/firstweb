@@ -1,0 +1,133 @@
+Typically, we are intereseted in cases where the plant and the controller are linear and time-invarinat, or can be modeled as such.
+Then we can represent components as transfer functions.
+
+Transfer Functions: Laplace Transform of the impulse response of an LTI system when I.C = 0.
+High gain feedback control loop reduces:
+	1. the sensitivity of the control system to variations in the plant.
+	2. the effect of disturbances of the output of a control system.
+
+Modeling Principles:
+	1. Indentify the states of the system: positions, velocities, inductor currents, capacitor voltages.
+	2. Use physicis to find states derivatives: dx1/dt, dx2/dt, dx3/dt...
+	3. organize as dx/dt = f(x,u), y=g(x,u). where x-state vector, u-control input, y-output of measurement.
+	4. Matrix Form: x_dot = [A]x + Bu
+			y     = [C]x + Du
+	5. Linearize if necessary.
+
+DC motor dynamics: State Space & Transfer Function methods, Calculate the angular velocity response to Step Voltage Input.
+Aileron input - Roll angle close loop control: by simply adding a gain value K. While the control works, the result is Oscillatory!
+
+"Approximate" Step Response of a 2nd oreder, two complex poles, no finite zeros system.
+	G(s) = wn^2/(s^2+2*zeta*wn*s+wn^3)
+From solving the poles of [den], s = -sigma+-j*wd,
+We can find: undamped frequency: wn, damping ratio: zeta, negative real part: sigma (zeta = sigma/wn)
+From this, the "estimated" time-domain specification is:
+	1. rise time: tr = 1.8/wn
+	2. Overshoot: Mp = e^(-pi*zeta/sqrt(1-zeta^2)) = fcn(zeta)
+	3. Peak time: tp = pi/wd
+	4. settling time: ts = 4.6/sigma.
+Accordingly, By setting the "time specifications" tr, Mp, ts, yield an allowable region for poles.
+	1. wn >= 1.8/tr
+	2. zeta >= zeta(Mp), (from Mp-zeta relation)
+	3. sigma >= 4.6/ts
+
+What if there are finite zeros??
+	H(s) = G(s)*(as+1), 
+By H(s) = H0(s)+a*s*H0(s), where H0(s) is the form without zeros.
+h(t) = h0(t) + a*d(h0(t))/dt,
+[Step response in time domain] =
+[Step response in time domain(without zeros)] + a* time derivative of [Step response in time domain(without zeros)]
+The zero has small effect while |a*wn| << 1
+	1. with a>0, zero in the left-half plane, tends to speed up time response, increase overshoot.
+	2. with a<0, zero in the right-half plant (Non-Minimum Phase Zero, NMP zero)
+		a) step response is the original step respone "minus" a constant * the derivative.
+		b) undesirable effect: initial "wrong way" behavior. (ex/ backing car, to get a backing car to return to a given line,
+		   must make the front end go the wrong way first.)
+
+What if there are additional poles?
+	H(s) = G(s)* 1/(as+1),
+Step response = original response + (1/a)*e^(-t/a)*(sigma(t)), where sigam(t) is the impulse fcn. if sigma(0) = 1, else sigma(t) = 0
+Effect: smooth the original step response, increase ts, reduce Mp.
+
+Routh Stability Criterion:
+Determine the stability of systems with high order polynomials in [num] (Hard to solve the poles for high order polynominal)
+All roots lie in LHP if and only if a certain set of algebraic combinations of the coefficients all have same sign. (left column of Routh array)
+https://www.youtube.com/watch?v=WBCZBOB3LCA
+	ex/ what values of the gain K is the following system stable? G(s) = 1/(s+1)^3, with gain K, close loop.
+	    H(s) = KG/(1+KG), [num] = (s+1)^3+K. First column of Routh array [1,3,(8-K)/3,1+K],
+	    if K > 8, sign of First column of Routh array = [+,+,-,+] unstable,
+	    if K < -1, sigm of First column of Routh array = [+,+,+,-] unstable.
+
+Effect of Noise and Disturbance:
+Design our controller, so that the "shape" of the Bode plot of Sensitivity and Complementary transfer function is "such" that represents: reference tracking, noise rejection, and disturbance rejection.
+Yet, S & T transfer functions are not independant, relation is S+T=1
+Tradeoff between these two!!!
+*See figures: Noise & Disturb Block Diagram, Bode Plot_S and _T. 
+
+Followingly, Since the S & T function only depends on C(s), which is the controller's transfer function,
+We can directly design the "shape" of C(s), on the Bode plot, so that S & T satisfied tha "shape".
+From the "shape" of the open-loop transfer function, C(s)P(s),
+We can see the characteristic of the close-loop transfer functions, S & T, which influence reference tracking, noise rejection, and disturbance rejection.
+*See figures: Bode Plot PC-T; PC-S; PC-S,T
+
+PID control:
+PID describes how the error term is handled.
+P- Proportional Control, Kp, simply multiply the error signal by Kp times, change wn -> effect rising time.
+D- Derivative Contrl, KD*s, change the damping ratio -> effect overshoot Mp.
+I- Integral Control, Ki/s, increase the order of the transferfunction, effect steady-state error.i
+*See figure: PID control block diagram, for control structure.
+Placing derivative in the feedback path can avoid additional zero effects. 
+PID control can make a 2nd order system to meet: rising time, overshoot, and steady-state error requirements!
+*See figure: PID control
+
+Root Locus:
+Often, it is useful to find the closed-loop poles of a system change as a single parameter is varied. To do this, we use the root locus method.
+
+Lead/Lag Compensator:
+What is phase lead? for example: input=sin(t), output=d(sin(t))/dt=cos(t).
+Observe that the output is 90 degree leading the input.
+And if we get the Bode plot of the transfer fcn (differentiate operation, s),
+we can see the phase plot is +90 degree for all input frequncy.
+*See figure: What is phase lead?
+	differentiate(s) +90 phase
+	integral(1/s)    -90 phase
+So a zero adds phase, and a pole subtracts phase.
+Lead/Lag Compensator = (wp/wz)*(s+wz)/(s+wp)
+	Lead: wz < wp
+	Lag : wz > wp
+*See figure: Lead Compensator_bodeplot
+
+Phase Margin and Damping ratio:
+Low PM -> low damping ratio.
+When the phase margin is small, the closed-loop system is close to instability.
+
+Root Locus Method:
+Watching how the roots move through the s-plane is powerful.
+Only one unknown variable in the transfer function.
+Be careful when transforming time domain spec into S-domain. Because Damping ratio and Natural frequency are defined for 2nd order system.
+*See figure: Root Locus Intro.
+
+Nyquist Stability Criterion:
+For a closed loop transfer function of: G/(1+GH).
+We can see (1+GH) as num(s)/den(s). Therefore, the closed loop Transfer function becomes: G*den(s)/num(s).
+So, If (1+GH) has a "zero" in the RHP, then the closed loop system is unstable.
+It is hard to find the poles and zeros if we add 1 to the open loop GH.
+However, it is easy to do that in a Nyquist Plot!
+
+Cauchy's Argument Principle:
+Mapping from s-plane to w-plane through the transfer function.
+*See figure: Caushy's Argument Principle
+
+Nyquist Plot:
+A graphical analogy to Ruth Stability Criteria.
+	1. Nyquist plot of GH,(open loop)
+	2. Count encirclements of -1, in clockwise direction
+	3. Figure out how many "more" poles or zeros are in RHP
+Equation: z = N + P
+	z, number of RHP zeros
+	N, number of CW encirclements of -1
+	P, number of RHP poles for open loop system.
+You must know the open loop poles in order to determine the number of closed loop zeros in RHP.
+With Nyquist, have the ability to analyze a system with an unstable open loop plant!
+For example, fighter jet.
+*See figure: Nyquist Plot Design F16

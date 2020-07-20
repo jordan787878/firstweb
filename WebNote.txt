@@ -1,0 +1,64 @@
+2020.07.18
+~Mars Perseverance Photo Booth
+Mix mars background to photos! Fun!
+
+~#CountdownToMars Socil
+NASA hosts facebook community for the Mars Perseverance Rover Launch.
+I apply to join the community, waiting approval.
+(update) I was in!
+
+2020.07.19
+~Andrej Karpathy MIT Technology Review
+He employs CNN to allow automated cars to infer the story, namely what is going on, from the image of tradition cameras.
+
+~Adversarial attacks
+adversarial attack is manipulation of input data that looks innocuous to a person but fools neural networks.
+e.g. random black-white stickers on a stop sign, which did not obscure the sign's clear lettering, can cause the AI to generate a result of speed limit of 45 mph. (showed by Bo Li)
+Robustness of the AI.
+
+~Neural Magic
+Neural Magic is an algorithm which allows any company to deploy a deep-learning model without the need for specialized hardware (GPU). Shavit recalls, "I realized that a CPU can do what a GPU does.i"
+Cons of GPU:
+	1. can't operate without CPU.
+	2. limited amount of cache memory. (back-and-forth data flow)
+
+~Frictionless Checkout
+new store experience by removing the checkout line, interaction with a cashier, and the need to scan and bag items. Customers just walk out after selectin items. Ceiling cameras and shelf sensor determine what customers have selected to buy. Later, an e-receipt appears on their phone.
+(California-based AiFi introduce NanoStore)
+ALEGION Company: How to prevent loss of inventory during frictionless checkout?
+
+~A concept in psychology is helping AI to better navigate our world
+Theory of affordance: when intelligent beings look at hte world they perceive not simply objects and their relationship but also their possibilities. (e.g. when we look at a chair, we know that we can sit on it)
+So we can first teach the environment's affordances to robot (can't penetrate wall), then train it to navigate. This approach eliminates the failed trials of moving toward the walls.
+<https://arxiv.org/pdf/2006.15085.pdf>
+
+~Dust Storms on Mars
+Dust storms can often grow into massive behemoths that last several weeks, blanketing the entire planet, and cutting off communication.
+Emirates Mars mission aims to study the martian atmosphere. (Middle East)
+
+~Are we making spacecraft too autonomous?
+Darrel Raines: autonomy is key for areas of "critical response time", like the ascent of a rocket after liftoff. Or in instances where the crew might be incapacitated.
+Ad Astra, a Houston-based company looking to makee plasma rocket propulsion viable, use automatic software to figure out the optimal frequencies for the heating of argon gas.
+But cases of failure due to code happenes!
+e.g. Boeing's Starliner falied to make it to the ISS because of a glitch in its internal timer.
+Have to have a rigorous software testing program.
+
+~Virgin Orbit's rocket has failed on its first attempt to get into space
+LauncherOne rocket failed on May 25 after seven years of development and testing.
+After released from a Boeing 747, it ignited and fell into the sea.
+The rocket had previouly been dropped from the plane, but this was the first time it was ignited.
+
+~Rockey Lab's 13th launch ends in failure
+The vehicle started losing speed and it dropped in altitude on Jult 4.
+The anomaly occured at six minute after launch.
+Rocket Lab has put 53 spacecraft into low Earth orbit on 12 separate missions.
+This was the first major failure for the company.
+
+~NASA and Boeing complete orbital flight test reviews
+Three primary anomalies: 2 software coding errors (Mission Elapsed Timer, Service Module Disposal Burn), 1 unanticipated loss of space-to-ground communication capability.
+Test and Simulation: need greatedr hardware and software integration testing; using max. amount of flight hardware available; review subsystem behaviors and limitations; address any identified simulation gaps.
+Requirements: assessment of all software requirements with multiple logic conditions to ensure test coverage.
+
+~China Yutu-2
+Yutu-2 lunar rover found bizzare "gel-like" substance with unusual color at the moon's far side.
+  
