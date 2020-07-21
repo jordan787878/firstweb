@@ -61,4 +61,84 @@ Requirements: assessment of all software requirements with multiple logic condit
 
 ~China Yutu-2
 Yutu-2 lunar rover found bizzare "gel-like" substance with unusual color at the moon's far side.
-  
+
+2020.07.20
+~Goodhart's Law
+Once a measure is turned into a target, it ceases to be a good measure.
+Example 1: When Vietnam govern. started to provide cash reward for each rat killed (e.g. counting the rat tails), the number of rats didn't decreased although many people came to claimed the cash reward. People just cut the rats' tails, released the rat so they can reproduce more rats, or even bred rats to cut their tails.
+Example 2: British India reward snake kill.
+Cobra effect: A decision that produces an effect opposite to the initial purpose.
+(Or Campbell's Laws)
+Example 3: when companies start to focus on a particular KPI (key performance indicator), the quality of that metric deteriorates.
+Once people understand how they are being measured, the measure becomes useless as people seek to do well on the measure.
+(e.g. the number of phone calls made a day. how search engine rank websites using the number of links)
+<https://dataskeptic.com/blog/episodes/2016/goodharts-law>
+
+~Data Skeptic
+Good Website!
+
+~A supermassive black hole lit up a collision of two smaller black holes
+About 4 billion light-years away, two black holes collided into one other while in the vicinity of a supermassive black hole called J1249+3449.
+Accretion disk: a swirl of stars, gas, and dust that is slowly being sucked toward the black hole's event horizon.
+When the two black holes collided, the force sent them, now merged as one, hurtling out of the supermassive black hole's accrestion disk.
+When the merge black hole sped into space, it lit up the surrounding gas in the disk.
+
+~How did planet get water?
+New: "perhaps" oceans might actually form "inside-out", as internal heating helps release liquid water that's trapped in the deeper layer.
+Tra: asteroids deliver water during the early days of a star system.
+
+~NASA's new moon-bound space suits will get a boost from AI
+Biggest upgrade to the space suit is xEMU (Extravehicular Mobility Unit)
+xEMU's portable life-support system: handles space suit's power, communications, oxygen supply, temp. regulation.
+Some of the components in an astronaut life-support system will be designed by AI.
+Requirement of life-support system: safe, light, and strong to withstand high g-force.
+Instead of spending weeks debating the ideal shape of each widget, they use "Generative Design": feed the AI software a set of requirements for a component's max. size, the weight it has to bear, or the temp. it will be exposed to and let the algo. figure out the rest.
+(American company, PTC, made the software)
+Different algo. in PTC's AI:
+	1. generative adversarial networks: game-like approach, two ML algo. face off against one another in competition to design the most opt. component. (same technique used to "generate photos of people who don't exist)
+	2. genetic algo. : analogous to natural selection. generate multiple designs, combine them, and then take the best designs of the new generation and repeat.
+Advantage: fast and easily generate new design if requirements change in the future. (No waste on enigneer effort)
+
+~Generative Design: <https://www.autodesk.com/solutions/generative-design>
+MaRS Innovation District: Audodesk office and research lab 2015. Use generative design by gathering employee's opinion about preferred work space, work style, and layout.
+A.I. chair: Kartell company, with French designer Philippe Starck, and Autodesk software.
+<https://www.starck.com/a-i-for-kartell-by-starck-powered-by-autodesk-kartell-p3534>
+Car chasis: Hackrod project with Dreamcatcher, able to cal. fuel efficiency, aero dynamics, production cost, material tradeoff.
+Idea: instead of using simulation "after" to validate the design, they actually use the simulation to design the element itself. instead of specify points and surface, they specify goals and contraints; a higher level.
+<https://www.autodeskresearch.com/blog/when-iot-meets-generative-design-cars>
+Japan's Daiwa House Industry: developing custom systems that use generative deisng to opt. building on small parcels, in line with the country's urbanization patterns.
+<https://www.autodesk.com/redshift/daiwa-house-industry/>
+
+~MIT InstantCAD tool
+<https://people.csail.mit.edu/aschulz/optCAD/index.html>
+I download the tool in ~/InstantCAD/
+
+~MIT News
+Information for latest research of MIT!
+
+~NASA Evolvable Systems Technology
+A technology to advance engineering design and optimization. 
+It can auto. design and opt. systems.
+Evolvable Systems algorithms are highly adaptable, relatively fast, and can be set up to optimize cost, robustness, and performance by embedding these measures directly into the multi-objective utility functions that comprise the algorithms.
+application: fault recovery of FPGA.
+Another Pro: an object can be designed inside the environment it will be deployed (e.g. antennas are designed to achieve a certain performance in free space, yet when an antenna is affixed to a spacecraft, the performance can be greatly affected by reflections of the signal off of the spacecraft.) In our approach, we can evolve the antenna while it is affixed (in simulation) to the target spacecraft.
+<https://www.nasa.gov/centers/ames/research/technology-onepagers/evolvable_systems.html>
+
+~Is this photo real? AI gets better at faking images
+BigGAN software to generate many kinds of highly realistic images
+<https://www.wired.com/story/is-this-photo-real-ai-getting-better-faking-images/>
+
+2020.07.21
+~Moon Dust
+NASA: the biggest challenge to lunar operation is the dust.
+Moon dust is sticky because of its electrostatic charge.
+When the sun is high and UV radiation is at its peak, the dust is extra charged, and thus extra sticky. When the sun goes down, the dust seems to lose some of its adhesive force.
+In Apollo missions, Dust Detector Experiment (DDE): the power drop of the solar cells can measure the accumulation of the moon dust. Designed by O'Brien.
+Impact on moon probes: Surveyor 3 bright-white surface had turned a tan color after 2.5 years on moon. Ultrafine moon dust embedded all over the microtexture of the paint. But the quesiton is how did the dust cover the Surveyor 3's surface?
+Dust storm theory: During sunrise, moon dust levitates and swirl like a storm.
+<https://www.wired.com/story/moondust-nasa-lunar-ambitions/>
+
+~MEMS Gyroscope
+Measure angular movement using Coriolis effect.
+ST's MEMS gyroscopes use a tuning fork configuration: 2 mass constantly oscillates in opposite direction. When an angular velocity is applied, the Coriolis force on each mass also acts in opposite directions. The differential value in capacitance is then used to measure the rotation. When linear accel. is applied, the two mass move in the same direction, and the diff. capacitance is zero.
+
