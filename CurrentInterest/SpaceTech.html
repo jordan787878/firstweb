@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang = "en">
+<head>
+        <meta charset="UTF-8">
+	 <title>Space Tech</title>	
+</head>
+
+<body>
+	<header>
+	<h1>Index</h1>
+	<nav>
+		<a href="#p1">Autonomous spacecraft</a><br>
+		<a href="#p2">Virgin Orbit's rocket launch failure</a><br>
+		<a href="#p3">Rockey Lab's rocket launch failure</a><br>
+		<a href="#p4">NASA and Boeing review of test failure </a><br>
+		<a href="#p5">NASA's new space suits with AI </a><br>
+		<a href="#p6">NASA Evolvable Systems Technology </a><br>
+		<a href="#p7">MEMS Gyroscope </a><br>
+
+	</nav>
+	</header>
+
+        <main>
+		<p id="p1">
+		<b>Are we making spacecraft too autonomous?</b><br>
+		Darrel Raines: autonomy is key for areas of "critical response time", like the ascent of a rocket after liftoff. Or in instances where the crew might be incapacitated.<br>
+		Ad Astra, a Houston-based company looking to makee plasma rocket propulsion viable, use automatic software to figure out the optimal frequencies for the heating of argon gas.<br>
+But cases of failure due to code happenes! (e.g. Boeing's Starliner falied to make it to the ISS because of a glitch in its internal timer.) Need to have to have a rigorous software testing program.
+		</p>
+
+		<p id="p2">
+		<b>Virgin Orbit's rocket has failed on its first attempt to get into space</b><br>
+LauncherOne rocket failed on May 25 after seven years of development and testing. After released from a Boeing 747, it ignited and fell into the sea. The rocket had previouly been dropped from the plane, but this was the first time it was ignited.
+		</p>
+		
+		<p id="p3">
+		<b>Rockey Lab's 13th launch ends in failure</b><br>
+The vehicle started losing speed and it dropped in altitude on Jult 4. The anomaly occured at six minute after launch. Rocket Lab has put 53 spacecraft into low Earth orbit on 12 separate missions. This was the first major failure for the company.
+		</p>
+
+		<p id="p4">
+		<b>NASA and Boeing complete orbital flight test reviews</b><br>
+		Three primary anomalies: 2 software coding errors (Mission Elapsed Timer, Service Module Disposal Burn), 1 unanticipated loss of space-to-ground communication capability.<br>
+		Test and Simulation: need greatedr hardware and software integration testing; using max. amount of flight hardware available; review subsystem behaviors and limitations; address any identified simulation gaps. <br>
+Requirements: assessment of all software requirements with multiple logic conditions to ensure test coverage.
+		</p>
+
+		<p id="p5">
+		<b>NASA's new moon-bound space suits will get a boost from AI</b><br>
+		Biggest upgrade to the space suit is xEMU (Extravehicular Mobility Unit)<br>
+		xEMU's portable life-support system: handles space suit's power, communications, oxygen supply, temp. regulation.<br>
+		Some of the components in an astronaut life-support system will be designed by AI.<br>
+		Requirement of life-support system: safe, light, and strong to withstand high g-force.<br>
+Instead of spending weeks debating the ideal shape of each widget, they use "Generative Design": feed the AI software a set of requirements for a component's max. size, the weight it has to bear, or the temp. it will be exposed to and let the algo. figure out the rest.
+(American company, PTC, made the software)<br>
+Different algo. in PTC's AI:<br>
+1. generative adversarial networks: game-like approach, two ML algo. face off against one another in competition to design the most opt. component. (same technique used to "generate photos of people who don't exist)<br>
+        2. genetic algo. : analogous to natural selection. generate multiple designs, combine them, and then take the best designs of the new generation and repeat.
+Advantage: fast and easily generate new design if requirements change in the future. (No waste on enigneer effort)
+		</p>
+
+		<p id="p6">
+		<b>NASA Evolvable Systems Technology</b><br>
+		A technology to advance engineering design and optimization. It can auto. design and opt. systems. <br>
+		Evolvable Systems algorithms are highly adaptable, relatively fast, and can be set up to optimize cost, robustness, and performance by embedding these measures directly into the multi-objective utility functions that comprise the algorithms. Application: fault recovery of FPGA.<br>
+		Another Pro: an object can be designed inside the environment it will be deployed (e.g. antennas are designed to achieve a certain performance in free space, yet when an antenna is affixed to a spacecraft, the performance can be greatly affected by reflections of the signal off of the spacecraft.) In our approach, we can evolve the antenna while it is affixed (in simulation) to the target spacecraft.
+		<a href="https://www.nasa.gov/centers/ames/research/technology-onepagers/evolvable_systems.html" target="_blank"><i>learn more</i></a>
+		</p>
+
+		<p id="p7">
+		<b>MEMS Gyroscope</b><br>
+		Measure angular movement using Coriolis effect.<br>
+ST's MEMS gyroscopes use a tuning fork configuration: 2 mass constantly oscillates in opposite direction. When an angular velocity is applied, the Coriolis force on each mass also acts in opposite directions. The differential value in capacitance is then used to measure the rotation. When linear accel. is applied, the two mass move in the same direction, and the diff. capacitance is zero.
+		</p>
+	</main>
+</body>
+</html>
+
