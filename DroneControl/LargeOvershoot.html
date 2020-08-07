@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang = "en">
+<head>
+<meta charset="UTF-8">
+<title>Large Altitude Overshoot 2.0
+</title>
+</head>
+<body>
+<main>
+<h1>Large Altitude Overshoot
+</h1><p><b>Overview</b><br>This is the working notes following the asbQuadcopter project developed by MIT. I've tuned and modified the original model so the drone can successfully fly in the simulation. Yet after I was satisfied with the unit step response of the altitude control, I found huge overshoot when I changed the unit step input to 15 meter and above.<br></p><p><b>
+
+Large Altitude Overshoot 2.0</b><br>FND : Although the XY pos is stable for P = 1.0 at step = 15.
+Now we have a large overshoot at 18.5. (23 %). 
+I inspects the Instrument Panel, found that four thruster turned into zero at a short period of time.
+<br>The propeller actuator's saturation limit is [-1.202 1.202]. I plot the u(T), and Sat u(T) to see the effects of differnt PD gains on the saturation behavior.
+<br><img src = "Figures/InSat_0.8.png
+" width = "70%"><br><img src = "Figures/InSat_0.35.png
+" width = "70%"><br>From the Sat u(T), u(T) plot, I also found that the propeller even spins in the opposite direction! which might be an abnormal control behavior.<br></p><p><b>
+
+Reduce PD gains</b><br>To get rid of the anti-rotation control, I keep reducing the PD gains. Finally, I choose [P:D] = [0.045 0.08]. In this combination there is no anti-rotation control, and the altitude plot is smooth, with overshoot of 3.3%; ts = 10 sec; tr = 2.5 sec. Compared to the [0.8 0.45], overshoot = 9.3%; ts = 5 sec; tr = 2 sec.
+<br><img src = "Figures/InSat_0.045.png
+" width = "70%"><br>Then, I inspect the drone performance at different step input [-1 -25]. The performance changes through the cmd input. But the key point is that it is always stable. In contrast the drone becomes unstable if the cmd is -25 with PD gains [0.8 0.45]. In short, [0.045 0.08] is asured to make the drone stable in a larger cmd region. And [0.8 0.45] has a smaller cmd region, but better performance. It is a trade-off. A compromise.
+<br><img src = "Figures/P0.045_cmd-25.png
+" width = "70%"><br><img src = "Figures/P0.8_cmd-25.png
+" width = "70%"><br>I feel like it demonstartes the concept that we can not change a toyoto into F1 by feedback control. Getting better performance by blindly increasing the PD gains might work in a limited reigion of cmd. But for cmd outside the limited region, the system might be unstable.<br></p><p><b>
+
+Summary</b><br>Thus, we now have three choice:
+<br>1. Make a compromise between performance and stability, then choose the PD gains accordingly.
+<br>2. Use varying PD gains system to set different PD gains based on the input cmd. A much complicated control logic.
+<br>3. Or we can use a high performance PD gains, but limit the input cmd. (e.g. To fly to 25 meter, our input cmd would be separated into [-10 -20 -25])
+<br>So now, it all comes back to our mission requirement. What is our mission? To follow a single specified route? Or to be able to follow "any" specified route? And how do we generate the cmd for fly route?<br></p></main>
+<footer><a href="0000
+">reference source</a><br>Chun-Wei, Kong - August 07, 2020</footer></body>
+</html>

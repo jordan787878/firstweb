@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang = "en">
+<head>
+<meta charset="UTF-8">
+<title>Parrot Minidrone EX
+</title>
+</head>
+<body>
+<main>
+<h1>Parrot Minidrone Example
+</h1><p><b>Drone Hardware: Parrot Minidrone</b><br>sensors: 
+<br>1. ultrasound - distance above a surface
+<br>2. camera - use a optical flow methond to determine drone's horizonal motion and speed
+<br>3. pressure sensor - altitude.
+<br>4. IMU - acceleratiob, angular rate.
+
+<br>actuators:
+<br>4 propellers, X-configuration.
+<br>Propellers in same diagonal spins in the same direction.
+<br>So that thrust, roll, pitch, and yaw can be commanded independently.
+<br>(Command one motion without affecting the others)<br></p><p><b>
+
+Overview of Control Problem</b><br>Manipulate motor speed precisely to maneuver drone in 3D space.
+<br>This is an underactuated system: 4 motors for 6 degree of freedom
+<br>3 translational directions: up/down, left/right, forward/backward
+<br>3 rotational directions: roll, pitch, yaw<br></p><p><b>
+
+Control system architecture</b><br>Motor Mixing Algorithm:
+<br>Motor_fr = Thrust_cmd + Yaw_cmd + Pitch_cmd + Roll_cmd
+<br>Motor_fl = Thrust_cmd - Yaw_cmd + Pitch_cmd - Roll_cmd
+<br>Motor_br = Thrust_cmd - Yaw_cmd - Pitch_cmd + Roll_cmd
+<br>Motor_bl = Thrust_cmd + Yaw_cmd - Pitch_cmd - Roll_cmd
+<br>Moving forward/backward, left/right are unactuated motions: Need to first rotate to an angle, so that the thrust vector is partially in the gravity direction, and partially in the commanded direction.
+<br>For our "hovering drone", we assume the roll and pitch angles are small to thrust only affects altitude.
+For "racing drone", extreme roll and pitch angles are necessary, so the thrust is coupled with altitude and horizontal speed.
+<br>Now, let's assume our "altitude controller" as a PID controller. Consider wind gust disturbane, the drone will roll and move horizontally. We need to keep the roll and pitch angles zero, for hovering. So we shall add three other PID controller.
+<br><img src = "Figures/4PIDforHover.png
+" width = "70%"><br>Still not prefect! The drone may drift away from it's original position, during the recovering of the roll/pitch angles due to wind gust. The drone may walk away slowly! There's nothing in our control architecture to bring our drone back to the starting position.
+<br>Re-think! roll/pitch angles may be non-zero in order to hover at the starting position in the strong wind gust! Maintain zero is not good enough! So, rather than "level fly", we need "ground position controller".
+<br>Add a position controller: input: position error; output: roll and pitch angles. These angles are the referecne roll and pitch angles! (rather than 0 in the previous control architecture) Position controller is the outer loop. (cascaded loops) The yaw angle also feeds into the position controller, to find the "Heading" of the drone.
+<br><img src = "Figures/PosControl.png
+" width = "70%"><br>Problems to solve:
+<br>1. Get required States: yaw, roll, pitch, altitude, XY position
+<br>2. Tune 6 PID controller that all interact with each other
+
+Code control logic<br></p><p><b>
+
+how to build a model for simulation</b><br>Model-based design work flow:
+<br><img src = "Figures/Workflow.png
+" width = "70%"><br>We use high fidelity non-linear model for simulation. We use low fidelity linear model for tuning the controller. Model block can be divided into sub-models:
+actuators, airframe, environment, and sensors.
+<br><img src = "Figures/SubModels.png" width = "70%"><br></p></main>
+<footer><a href="0000
+">reference source</a><br>Chun-Wei, Kong - August 07, 2020</footer></body>
+</html>

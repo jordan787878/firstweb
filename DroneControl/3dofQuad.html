@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang = "en">
+<head>
+<meta charset="UTF-8">
+<title>3 DOF Quadcoptor
+</title>
+</head>
+<body>
+<main>
+<h1>3-Dof Quadcoptor Simulation and Control
+</h1><p><b>Current Model</b><br>3 degree of freedom: y,z, and roll.
+<br>2 control inputs: u1 for thrust, u2 for torque on y-z plane. (control limits: u1 <= 30 Newton; roll angle < 30 degree)<br></p><p><b>
+
+Equations</b><br>| z_dd = g - (u1/m)*cos(roll)
+<br>| y_dd = (u1/m)*sin(roll)
+<br>| roll_dd = u2/Ixx<br></p><p><b>
+
+Current Control</b><br>User can set the Z (altitude) and Y (horizontal) waypoints. The demo uses a set of pulse generator as Z-Y input, so that the drone can fly in a 1x1 meter square.
+<br>Altitdue control: PD control + Mass Feedforward
+<br>Horizontal control: cascaded PID loop; outer Y PID controller generates the refernce roll angle input for inner roll PID loop.
+<br>Takeoff flag: now I use clock + Takeoff time to set the takeoff flag.
+<br>See the results of 1. without Mass Feedforward and 2. with Mass Feedforward.
+<br><img src = "Figures/noFF.png
+" width = "70%"><br><img src = "Figures/withFF.png" width = "70%"><br></p></main>
+<footer><a href="0000
+">reference source</a><br>Chun-Wei, Kong - August 07, 2020</footer></body>
+</html>
