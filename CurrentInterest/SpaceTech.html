@@ -9,6 +9,9 @@
 	<header>
 	<h1>Index</h1>
 	<nav>
+		<a href="SpaceTech/Rocket.html"> Rocket Engine </a><br>
+                <a href="SpaceTech/MarsRoverPER.html"> 2020 Mars Perseverance </a><br>
+		<br>
 		<a href="#p1">Autonomous spacecraft</a><br>
 		<a href="#p2">Virgin Orbit's rocket launch failure</a><br>
 		<a href="#p3">Rockey Lab's rocket launch failure</a><br>
@@ -16,7 +19,8 @@
 		<a href="#p5">NASA's new space suits with AI </a><br>
 		<a href="#p6">NASA Evolvable Systems Technology </a><br>
 		<a href="#p7">MEMS Gyroscope </a><br>
-
+		<a href="#p8">Japan's help on Artemis </a><br>
+		<a href="#p9">How Perseverance navigate?</a><br>
 	</nav>
 	</header>
 
@@ -72,6 +76,26 @@ Advantage: fast and easily generate new design if requirements change in the fut
 		Measure angular movement using Coriolis effect.<br>
 ST's MEMS gyroscopes use a tuning fork configuration: 2 mass constantly oscillates in opposite direction. When an angular velocity is applied, the Coriolis force on each mass also acts in opposite directions. The differential value in capacitance is then used to measure the rotation. When linear accel. is applied, the two mass move in the same direction, and the diff. capacitance is zero.
 		</p>
+
+		<p id="p8">
+		<b>Japan's help on Artemis</b><br>
+		JAXA could contribute to the Habitation and Logistics Outpost (HALO) module, developing life support and power elements.<br>
+		It can also hep in  delivering cargo, supplies, and parts to Gateway through its upcoming HTV-X spaceflight vehicle. <br>
+		JAXA can procide more lunar landing data by its Investigating Moon (SLIM) mission, testing brand-new precision luncar landing tech. in 2022.<br>
+		Japan is also working with Canada and the European Space Agency on Heracles, a robotic transport system that could deliver cargo to the moon or help bring back valuable resources mined there.<br>
+		JAXA and Toyota is working on a pressurized lunar rover that astronauts could use to cruise around the moon. <br>
+		</p>
+
+		<p id="p9">
+		<b>How Perseverance navigate on Mars by AI</b><br>
+		To continuously think and move, Perseverance has two computers. Main computer figures out how to get Perseverance to where it's supposed to go. Second computer makes sure it does not hit any rocks on the way. <br>
+		Autonomy is critical because of the signal delay, 22 minutes for light to travel from Earth to Mars. <br>
+		Perseverance uses stereo vision to create 3D pictures of the surroundings, and visual odometry software will analyze images separated in time to estimate how far the rover has moved. (No lidar system, because of reliability, energy cost, and bulky)<br>
+		Because Mars doesn't have a magnetic field or a thick atmophere to shield the charged particles from the sun, Mars rovers' computers are prone to damaged. Their transistors may turn on and off when they're not supposed to. Need transistors harder to turn on and off. (Xilinx chip) This compromise its computing performance.<br>
+		Perseverence's machine vision algorithm must be as lean and efficient as possible, without compromising its accuracy. (developed by Twu, Matties)<br>
+		Using the online tool AI4Mars to label terrain features in pictures downloaded from the Red Planet, you can train an artificial intelligence algorithm to automatically read the landscape. <a href="https://www.nasa.gov/feature/jpl/nasas-mars-rover-drivers-need-your-help">Nasa's Mars Rover Need Your Help</a>
+		</p>
+
 	</main>
 </body>
 </html>
