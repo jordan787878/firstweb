@@ -19,16 +19,12 @@ Current Control</b><br>User can set the Z (altitude) and Y (horizontal) waypoint
 <br>Altitdue control: PD control + Mass Feedforward
 <br>Horizontal control: cascaded PID loop; outer Y PID controller generates the refernce roll angle input for inner roll PID loop.
 <br>Takeoff flag: now I use clock + Takeoff time to set the takeoff flag.
-<br>See the results of 1. without Mass Feedforward and 2. with Mass Feedforward.
-<br><img src = "Figures/noFF.png
-" width = "70%"><br><img src = "Figures/withFF.png" width = "70%"><br></p><p><b>
 
 Command Matrix and Animation</b><br>Now, we can control the drone by setting waypoints in WayPts matrix(in the form of [y,z,t]). The signal.m script will calculate the corresponding input signal of Y(t), Z(t) position (use the concept of superposition to combine the nonlinear signals automatically.)
 <br>Then run the simulink model: nonlinear_airplane (it will generate tout,yout,zout,rollout datas in the out structure).
 <br>Then run the animation.m script to see the animation. (logdataprocess.m script will run first to collect the y_plot,z_plot,roll_plot points for animation)
 <br>Look! We can draw a star now! 
-<br><img src = "Figures/star_1.png
-" width = "70%"><br><img src = "Figures/star_2.png" width = "70%"><br></p><p><b>
+<br><img src = "Figures/star_demo.gif"><br>
 
 MATLAB Project Download Link</b><br>You can download the full project by:
 <br><a href="3dofQuadcopter_download.zip" download>3dofQuadcopter_download.zip</a><br></p></main>
