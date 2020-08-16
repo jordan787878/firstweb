@@ -14,11 +14,19 @@
 First demo shows the problem of attitude control using Euler Angles.<br>
 <a href="Figures/euler_demo_prob1_1.gif">almost near gimbal lock .gif</a><br>
 <a href="Figures/euler_demo_prob1_0.gif">gimbal lock .gif</a><br>
-<a href= "Figures/euler_demo_prob2_0.gif">Control Without FindEuler Solver .gif</a><br>
-<a href= "Figures/euler_demo_prob2_new.gif">Control With FindEuler Solver .gif</a><br>
+<a href= "Figures/euler_demo_prob2_0.gif">Control without FindEuler Solver .gif</a><br>
+<a href= "Figures/euler_demo_prob2_new.gif">Control with non-linear FindEuler Solver .gif</a><br>
 <b>2. Star Tracker demo </b><br>
-Second demo shows a full 6dof control of a Star Tracker spacecraft. The z-axis is the telescope direction (red axis), it will always point toward its target of interest, which is the black circle star. In the meantime its x-axis is the antenna direction (blue one), it will keep a certain direction to reciece signal from ground station.<br>
-<a href="Figures/StarTracker_demo.gif">Star Tracker .gif</a><br>
+Second demo shows a full 6dof control of a Star Tracker spacecraft. The z-axis is the telescope direction (red axis), it will always point toward its target of interest, which is the black circle star. In the meantime its x-axis is the antenna direction (blue one), it will keep a certain direction to recieve signal from ground station.<br>
+<img src="Figures/star_demo0_3D.gif">
+<img src="Figures/star_demo0_Side.gif"><br>
+<i>click to see more demos: different target star position, differnet XYZ orbit for star tracker spacecraft.</i><br>
+<a href="Figures/star_demo1_3D.gif">demo1 (3D).gif</a>
+<a href="Figures/star_demo1_Side.gif">demo1 (Side).gif</a><br>
+<a href="Figures/star_demo2_3D.gif">demo2 (3D).gif</a>
+<a href="Figures/star_demo2_Side.gif">demo2 (Side).gif</a><br>
+<a href="Figures/star_demo3_3D.gif">demo3 (3D).gif</a>
+<a href="Figures/star_demo3_Side.gif">demo3 (Side).gif</a><br>
 </p>
 
 <p><b>Overview</b><br>In applications where the sensor will never operate near pitch angles of +- 90 degrees, Eular Angles are a good choice.
@@ -59,7 +67,7 @@ The z-axis gyro output must be rotated into the Inertial frame, The y-axis gyro 
 	<a href="https://www.gregslabaugh.net/publications/euler.pdf">rotation matrix</a><br>
 	<a href="http://ksuweb.kennesaw.edu/~plaval/math4490/rotgen.pdf">rotate aroung arbitrary axis</a><br>
 	<a href="https://ocw.mit.edu/courses/mechanical-engineering/2-154-maneuvering-and-control-of-surface-and-underwater-vehicles-13-49-fall-2004/lecture-notes/lec1.pdf">MIT Kinematics of Reference Frame</a><br>
-	Chun-Wei, Kong - August 12, 2020
+	Chun-Wei, Kong - August 16, 2020
 </footer>
 </body>
 </html>
