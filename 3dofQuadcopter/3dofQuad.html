@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang = "en">
+<head>
+<meta charset="UTF-8">
+<title>3 DOF Quadcoptor
+</title>
+</head>
+<body>
+<main>
+<h1>3-Dof Quadcoptor Simulation and Control
+</h1>
+<p><b>Demo</b><br>
+User can input the Waypoints in matrix form. Then the drone will automatically fly to that specified points at specific time.<br>
+<img src = "star_demo.gif"></p>
+
+<p><b>Current Model</b><br>3 degree of freedom: y,z, and roll.
+<br>2 control inputs: u1 for thrust, u2 for torque on y-z plane. (control limits: u1 <= 30 Newton; roll angle < 30 degree)<br></p><p><b>
+
+Equations</b><br>| z_dd = g - (u1/m)*cos(roll)
+<br>| y_dd = (u1/m)*sin(roll)
+<br>| roll_dd = u2/Ixx<br></p>
+
+<p><b>Current Control</b><br>
+Altitdue control: PD control + Mass Feedforward<br>
+Horizontal control: cascaded PID loop; outer Y PID controller generates the refernce roll angle input for inner roll PID loop.<br>
+Takeoff flag: now I use clock + Takeoff time to set the takeoff flag.</p>
+
+<p><b>Command Matrix and Animation</b><br>Now, we can control the drone by setting waypoints in WayPts matrix(in the form of [y,z,t]). The signal.m script will calculate the corresponding input signal of Y(t), Z(t) position (use the concept of superposition to combine the nonlinear signals automatically.)
+<br>Then run the simulink model: nonlinear_airframe (it will generate tout,yout,zout,rollout datas in the out structure).
+<br>Then run the animation.m script to see the animation. (logdataprocess.m script will run first to collect the y_plot,z_plot,roll_plot points for animation)
+</p>
+
+<p>
+<b>MATLAB Project Download Link</b><br>
+You can download the full project by:
+<br><a href="3dofQuadcopter_download.zip" download>3dofQuadcopter_download.zip</a><br>
+</p>
+</main>
+<footer>Chun-Wei, Kong - August 08, 2020</footer>
+</body>
+</html>
