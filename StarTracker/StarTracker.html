@@ -16,6 +16,7 @@ First demo shows the problem of attitude control using Euler Angles.<br>
 <a href="Figures/euler_demo_prob1_0.gif">gimbal lock .gif</a><br>
 <a href= "Figures/euler_demo_prob2_0.gif">Control without FindEuler Solver .gif</a><br>
 <a href= "Figures/euler_demo_prob2_new.gif">Control with non-linear FindEuler Solver .gif</a><br>
+<br>
 <b>2. Star Tracker demo </b><br>
 Second demo shows a full 6dof control of a Star Tracker spacecraft. The z-axis is the telescope direction (red axis), it will always point toward its target of interest, which is the black circle star. In the meantime its x-axis is the antenna direction (blue one), it will keep a certain direction to recieve signal from ground station.<br>
 <img src="Figures/star_demo0_3D.gif">
@@ -26,7 +27,16 @@ Second demo shows a full 6dof control of a Star Tracker spacecraft. The z-axis i
 <a href="Figures/star_demo2_3D.gif">demo2 (3D).gif</a>
 <a href="Figures/star_demo2_Side.gif">demo2 (Side).gif</a><br>
 <a href="Figures/star_demo3_3D.gif">demo3 (3D).gif</a>
-<a href="Figures/star_demo3_Side.gif">demo3 (Side).gif</a><br>
+<a href="Figures/star_demo3_Side.gif">demo3 (Side).gif</a><br><br>
+<b>3. Non-linear vs Linear Star Traker</b><br>
+In extreme cases, where XYZ orbit varies rapidly, the linear control logic of Star Tracker becomes unstable. So a non-linear control logic of Star Tracker is introduced. Rather than using PIDs combination to calculate reference Euler angles, the non-linear Star Tracker uses a custom non-linear equations to calculate the reference Euler angles. It is more stable, but more calculation loading.<br>
+<i>Linear Star Tracker Control (at extreme case):</i> <br>
+<img src="Figures/lin_startracker_3D.gif">
+<img src="Figures/lin_startracker_Side.gif"><br>
+<i>Non-linear Star Tracker Control (at extreme case):</i> <br>
+<img src="Figures/nonlin_startracker_3D.gif">
+<img src="Figures/nonlin_startracker_Side.gif"><br>
+
 </p>
 
 <p><b>Overview</b><br>In applications where the sensor will never operate near pitch angles of +- 90 degrees, Eular Angles are a good choice.
