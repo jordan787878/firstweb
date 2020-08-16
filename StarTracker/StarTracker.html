@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang = "en">
+<head>
+<meta charset="UTF-8">
+<title>Star Tracker
+</title>
+</head>
+<body>
+<main>
+<h1>Star Tracker Control and Simulation
+</h1>
+<p><b>Demo </b>(click to show gif animation)<br>
+<b>1. Attitude Control demo</b> <br>
+First demo shows the problem of attitude control using Euler Angles.<br>
+<a href="Figures/euler_demo_prob1_1.gif">almost near gimbal lock .gif</a><br>
+<a href="Figures/euler_demo_prob1_0.gif">gimbal lock .gif</a><br>
+<a href= "Figures/euler_demo_prob2_0.gif">Control Without FindEuler Solver .gif</a><br>
+<a href= "Figures/euler_demo_prob2_new.gif">Control With FindEuler Solver .gif</a><br>
+<b>2. Star Tracker demo </b><br>
+Second demo shows a full 6dof control of a Star Tracker spacecraft. The z-axis is the telescope direction (red axis), it will always point toward its target of interest, which is the black circle star. In the meantime its x-axis is the antenna direction (blue one), it will keep a certain direction to reciece signal from ground station.<br>
+<a href="Figures/StarTracker_demo.gif">Star Tracker .gif</a><br>
+</p>
+
+<p><b>Overview</b><br>In applications where the sensor will never operate near pitch angles of +- 90 degrees, Eular Angles are a good choice.
+<br>Euler angles can represent the 3D orientation of an object, using a combination of 3 rotations about"different" axes.
+<br>For convenience, we use multiple coordinate frames to describe the orientation of the sensor, including the "inertial frame," the "vehicle-1 frame," the "vehicle-2 frame," and the "body frame."
+<br>The inertial frame axes are Earth-fixed, and the body frame axes are aligned with the sensor. The vehicle-1 and vehicle-2 are intermediary frames used for convenience when illustrating the "sequence of operations" that take us from the inertial frame to the body frame of the sensor.<br></p><p><b>
+
+Inertial Frame</b><br>The "Inertial" frame: x points north, y points east, z points down. North-East-Down frame (NED)
+<br>The sequence of rotations is first yaw, then pitch and roll.<br></p><p><b>
+
+Vehicle-1 Frame</b><br>The "Vehicle-1" frame: yaw represents rotation about the inertial frame z-axis by an angle psi.
+<br>The yaw rotation produces a new coordinate framw where the z-axis is aligned with the inertial frame, and the x and y axes are rotated by the yaw angle psi. We call this new coordinate frame "Vehicle-1" frame.
+<br>The rotation matrix for moving from the Inertial to Vehicle-1 frame is,
+<br>R_ItoV1 = [[cos(psi) sin(psi) 0];[-sin(psi) cos(psi) 0];[0 0 1]]<br></p><p><b>
+
+Vehicle-2 Frame</b><br>The "Vehicle-2" frame: pitch represents rotation about the Vehicle-1 y-axis by an angle theta.
+<br>The rotation maxtrix for moving from the Vehicle-1 to the Vehicle-2 frame is,
+<br>R_V1toV2 = [[cos(theta) 0 -sin(theta)];[0 1 0];[sin(theta) 0 cos(theta)]]<br></p><p><b>
+
+Body Frame</b><br>The body frame is the coordinate system that is aligned with the body of the sensor. On an aircraft, the body frame x points out the nose, y points out the right side, z points out the bottom.
+<br>The body frame is obtained by performing a rotation by the angle phi around the Vehicle-2 frame x-axis.
+<br>The rotation maxtrix for moving from the Vehicle-2 to the Body is,
+<br>R_V2toB = [[1 0 0];[0 cos(phi) sin(phi)];[0 -sin(phi) cos(phi)]]
+
+Rotation Matrix<br></p><p><b>
+
+Gimbal Lock</b><br>Gimbal lock occurs when the orientation of the sensor cannot be "uniquely" represented using Euler Angles. The exact orientation at which gimbal lock occurs depends on the order of rotations used.<br></p><p><b>
+
+Example</b><br>For example, suppose that we want to obtain inertial frame acceleration so that we can integrate to obtain velocity estimates in the NED directions. Let vB be the measured Body-frame acceleration vector reported by the sensor. Then the inertial frame acceleration is: VI = R_BtoI*vB. The vector VI gives us the "measured" acceleration with respect to the Inertial frame. Note that this is not the "actual" acceleration. A little more work is required before we can extract the physical acceleration of the sensor. see http://www.chrobotics.com/library/accel-position-velocity
+<br>Next example, convert rate gyro data to the Inertial frame. The rate gyro data is reported with respect to the Body frame of the sensor. This means that each gyro angular rate must be converted to a different coordinate frame.
+The z-axis gyro output must be rotated into the Inertial frame, The y-axis gyro output into the Vehicle-1 frame. The x-axis gyro output into the Vehicle-2. Let p represents the Body frame x-axis gyro output, q y-axis gyro ouput, r z-axis output. Then the Euler Angle rates are, [phi_dot; theta_dot; psi_dot] =
+<br>[[1 sin(phi)tan(theta) cos(phi)tan(theta)];[0 cos(phi) -sin(phi)];[0 sin(phi)/cos(theta) cos(phi)/cos(theta)]]*[p;q;r]<br></p>
+
+</main>
+<footer>
+	here are the reference:<br>
+	<a href="http://www.chrobotics.com/library/understanding-euler-angles">Understanding Euler Angle</a><br>
+	<a href="https://www.gregslabaugh.net/publications/euler.pdf">rotation matrix</a><br>
+	<a href="http://ksuweb.kennesaw.edu/~plaval/math4490/rotgen.pdf">rotate aroung arbitrary axis</a><br>
+	<a href="https://ocw.mit.edu/courses/mechanical-engineering/2-154-maneuvering-and-control-of-surface-and-underwater-vehicles-13-49-fall-2004/lecture-notes/lec1.pdf">MIT Kinematics of Reference Frame</a><br>
+	Chun-Wei, Kong - August 12, 2020
+</footer>
+</body>
+</html>
