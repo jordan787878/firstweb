@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang = "en">
+<head>
+<meta charset="UTF-8">
+<title>6 DOF Quadcoptor
+</title>
+</head>
+<body>
+<main>
+<h1>6-Dof Quadcoptor Simulation and Control
+</h1>
+<p><b>Demo</b><br>
+The drone flies in two primary modes: 1) follow mode   2) surrounding mode.<br>
+1) Follow mode keeps constant distance to the moving target point (black dots), in the meantime point the camera (blue axis) toward the target point.<br>
+<img src = "Figures/follow.gif"><br>
+2) Surrounding mode keeps surrounding the moving target point, in the meantime point the camera (blue axis) toward the target point<br>
+<img src = "Figures/surround1.gif">
+<img src = "Figures/surround2.gif"><br>
+</p>
+
+<p>
+<b>Current Model</b><br>
+6 degree of freedom: X, Y, Z, roll, pitch, yaw<br>
+4 control inputs: u1 for thrust, u2, u3, u4 for torque on Xb,Yb,Zb axis.<br>
+control limits: u1 smaller than 30 Newton; Torque smaller than 1.2 Nm; angles smaller than 60 degree)<br>
+</p>
+
+<p><b>
+Equations: Body Frame</b><br>
+| F = m(v_dot + wxv)<br>
+| M = I*w_dot + w x (I*w)<br>
+</p>
+
+<p><b>Current Control</b><br>
+Altitdue control: PD control + Mass Feedforward<br>
+Position control: cascaded PD loop, outer PD control loop generates the input refecence signal for the inner angle PD control loop .<br>
+Yaw Tracker: point the camera (blue axis) toward the target, control the yaw angle.<br>
+Target Follow: keep the distance with the target, if the surrounding angular speed is set to zero, than the drone flies in 1st mode. Otherwise, it flies in 2cd mode.<br>
+Takeoff flag: now I use clock + Takeoff time to set the takeoff flag.<br>
+<img src = "Figures/controlmodel.png">
+</p>
+
+<b>Command Matrix and Animation</b><br>
+<ol>
+	<li>Set the initial values of the drone by running the %% Setup Drone section in SetDroneControl.m<br>
+		<img src = "Figures/SetDrone.png"></li>
+	<li>Use the form of [x,y,z,t] matrix to define the waypoints for the moving target, by running the %% Waypoints for drone section in XYZsignal.m. (you can obtain the WayPts by loading the pre-built waypoint from DroneSignal_movingtarget.mat file)<br>
+<img src = "Figures/WayPts.png">
+<img src = "Figures/WayPts_prebuilt.png"></li>
+	<li>Run the %% Generate signals section in XYZsignal.m to extrapolate the signals.<br>
+		<img src = "Figures/GenerateSignals.png"></li>
+	<li>Run the simulation of DroneControl.slx</li>
+	<li>Run the %% Simulink 3D Animation with Moving Target section in animation.m<br>
+		<img src = "Figures/Animation.png"></li>
+</ol>
+
+<p>
+<b>MATLAB Project Download Link</b><br>
+You can download the full project by:
+<a href="DroneControl_download.zip" download>DroneControl_download.zip</a><br>
+(please email me to get the unzip password. Thanks!)
+</p>
+</main>
+<footer>Chun-Wei, Kong - August 27, 2020</footer>
+</body>
+</html>
