@@ -1,0 +1,21 @@
+Fluid Mechanics
+h1: Fluid Mechanics
+ref: 0000
+
+Phases of Matter~
+    The motion of fluids and the reaction to external forces are described by the Navier-Stokes Equations, which express a conservation of mass, momentum, and energy. The motion of solids and the reaction to external forces are described by Newton's Laws of Motion.
+    When studying gases , we can investigate the motions and interactions of individual molecules, or we can investigate the large scale action of the gas as a whole. Scientists refer to the large scale motion of the gas as the macro scale and the individual molecular motions as the micro scale. Some phenomenon are easier to understand and explain based on the macro scale, while other phenomenon are more easily explained on the micro scale. Macro scale investigations are based on things that we can easily observe and measure. But micro scale investigations are based on rather simple theories because we cannot actually observe an individual gas molecule in motion. Macro scale and micro scale investigations are just two views of the same thing.
+    A plasma is a fluid, like a liquid or gas, but because of the charged particles present in a plasma, it responds to and generates electro-magnetic forces. There are fluid dynamic equations, called the Boltzman equations, which include the electro-magnetic forces with the normal fluid forces of the Navier-Stokes equations.
+#
+
+Netwon's Third Law~
+    img:3law.png
+#
+
+Conservation of Momentum~
+    The conservation of momentum states that, within some problem domain, the amount of momentum remains constant; momentum is neither created nor destroyed, but only changed through the action of forces as described by Newton's laws of motion.
+    Let us consider a very very simplified flow problem to show the implementation of Conservation of Momentum. Suppose the steady flow of fluid through a domain in which flow properties only change in one direction, x. Assuming density remains constant, the area through which the fluid flows remains constant, and the force is limited to only pressure. 
+    This results in a one dimensional, steady form of Euler's Equation, where the pressure drop of a fluid is proportional to both the value of the velocity and the velocity gradient. Interestingly, a solution of this momentum equation gives us the form of the dynamic pressure that appears in Bernoulli's Equation.
+    img:conP.png
+#
+
