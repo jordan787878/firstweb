@@ -42,15 +42,15 @@ Takeoff flag: now I use clock + Takeoff time to set the takeoff flag.<br>
 
 <b>Command Matrix and Animation</b><br>
 <ol>
-	<li>Set the initial values of the drone by running the %% Setup Drone section in SetDroneControl.m<br>
+	<li>Set the initial values of the drone by running the script, SetDroneControl.m<br>
 		<img src = "Figures/SetDrone.png"></li>
-	<li>Use the form of [x,y,z,t] matrix to define the waypoints for the moving target, by running the %% Waypoints for drone section in XYZsignal.m. (you can obtain the WayPts by loading the pre-built waypoint from DroneSignal_movingtarget.mat file)<br>
+	<li>Load the DroneSignal_square.mat file to get the WayPts matrix.<br>
 <img src = "Figures/WayPts.png">
 <img src = "Figures/WayPts_prebuilt.png"></li>
-	<li>Run the %% Generate signals section in XYZsignal.m to extrapolate the signals.<br>
+	<li>Run the XYZsignal script to generate the actual command that will later be the input of the drone simulink model<br>
 		<img src = "Figures/GenerateSignals.png"></li>
 	<li>Run the simulation of DroneControl.slx</li>
-	<li>Run the %% Simulink 3D Animation with Moving Target section in animation.m<br>
+	<li>Run the script, animation.m to visualize the result<br>
 		<img src = "Figures/Animation.png"></li>
 </ol>
 
