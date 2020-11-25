@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang = "en">
+<head>
+<meta charset="UTF-8">
+<title>(NEW MODE)6 DOF Quadcoptor
+</title>
+</head>
+<body>
+<main>
+<h1>(NEW MODE) 6-Dof Quadcoptor Simulation and Control
+</h1>
+
+<div>
+<h2>Introduction</h2>
+<p>
+Instead of "following or surrounding" a moving target, this NEW MODE lets the drone to directly move in a specified path. I made this mode because of several reasons.</p>
+<ol>
+	<li>Some viewers ask me if the drone can fly in circular path, or curve. </li>
+	<li>I read a paper about Improved Fast Marching Method from my viewer, which focuses on finding the optimized path, so I think this NEW MODE can help a lot. </li>
+</ol>
+<p>In additon, considering the purpose of flying along a specified path, the camera axis (blue axis) should be better to point along the direction it is moving forward, so that it can sense obstacles. This is done by the Yaw Header function. <br>
+In general, the drone can fly in any path. Try it!</p>
+</div>
+
+<div>
+	<h2>Demo</h2><p>
+	<img src = "Figures/demo_path.gif"><br>
+	The drone can now fly along any specificed path. The camera axis (blue axis) will face toward the direction it is moving.</p>
+</div>
+
+<div>
+	<h2>Steps to Run this Project</h2>
+<ol>
+	<li>Set the initial values of the drone by running the script SetDroneControl_copt.m<br>
+		<img src = "Figures/Set.png"></li>
+	<li>There are 2 ways to specify your path:
+		<ol>
+			<li> Specify by writing the equations of the path. Open GenerateA.m script, run the default path or write down your equations of path.<br> <img src = "Figures/GenerateA.png"> <img src = "Figures/Amatrix.png"> </li>
+			<li> If you have a complicated path that cannot be written by equations, load your (x,y,z) data points extracted from your complicated path into A matrix. Make sure you use enough data points to fit the complex path. </li>
+		</ol>
+	</li>
+	<li> Run the XYZsiganl_pathpts.m script to generate the Command signal, it will need the A matrix as input. <br>
+		<img src = "Figures/signal_path.png"></li>
+	<li> Open the New Simulink Model: DroneControl_Direct.slx and run it.<br>
+		<img src = "Figures/newmodel.png"></li>
+	<li> Open the New animation script: animation_direct.m and run it to see the result.
+		<img src = "Figures/newanim.png"> <br> </li>
+
+</ol>
+</div>
+
+<div>
+<h2>MATLAB Project Download Link</h2><p>
+You can download the full project by:
+<a href="DroneControl_Path.zip" download>DroneControl_Path.zip</a><br>
+(please email me to get the unzip password. Thanks!)
+</p>
+</div>
+
+</main>
+
+<footer>Chun-Wei, Kong - November 25, 2020<br>
+	<a href="../index.html">home page</a>
+</footer>
+
+</body>
+</html>
