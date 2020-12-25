@@ -24,9 +24,24 @@ In general, the drone can fly in any path. Try it!</p>
 
 <div>
 	<h2>Demo</h2><p>
-	<img src = "Figures/demo_path.gif"><br>
-	The drone can now fly along any specificed path. The camera axis (blue axis) will face toward the direction it is moving.</p>
+	<img src = "Figures/demo_path.gif">
+	<img src = "Figures/demo_path_2.gif"><br>
+	The drone can now fly along any specificed path. The camera axis (blue axis) will face toward the direction it is moving.<br>
+	By setting the path A matrix, the drone can fly in different speed. Left drone flies slower, and right drone flies faster.<br>
+	The right drone also hovers at [2,2,3] after t = 36 sec to show its stability.
+	</p>
 </div>
+
+<div>
+	<h2>Updates</h2>
+	<p>I made some changes to the Path model.</p>
+	<ol>
+		<li>I set the controller input and ouput signal rate to 0.01 sec.</li>
+		<li>I change the structure of X, Y, and Yaw controller. Instead of using a singal PD controller to transform the Ref. angle to Torque, I directly use the EulerRates as the input of derivative of angle. By doing so, it can reduce the noise of the Torque output signal, making it a more practical simulation. If you compare the new controller and the old ones, you can see that the Torque output of the old one has a lot of oscillation, which is impractical.</li>
+		<li>I provide an faster path (the path of the right drone) A_default matrix. You can double click it and load this path (the simpler process as the second step).</li>
+	</ol>
+</div>
+
 
 <div>
 	<h2>Steps to Run this Project</h2>
@@ -42,7 +57,7 @@ In general, the drone can fly in any path. Try it!</p>
 	<li> Run the XYZsiganl_pathpts.m script to generate the Command signal, it will need the A matrix as input. <br>
 		<img src = "Figures/signal_path.png"></li>
 	<li> Open the New Simulink Model: DroneControl_Direct.slx and run it.<br>
-		<img src = "Figures/newmodel.png"></li>
+		<img src = "Figures/New_Path_Model.png"></li>
 	<li> Open the New animation script: animation_direct.m and run it to see the result.
 		<img src = "Figures/newanim.png"> <br> </li>
 
@@ -51,7 +66,9 @@ In general, the drone can fly in any path. Try it!</p>
 
 <div>
 <h2>MATLAB Project Download Link</h2><p>
-You can download the full project by:
+Download new Version 2 project:
+<a href="DroneControl_Path_V2.zip" download>DroneControl_Path_V2.zip</a><br>
+Download old project:
 <a href="DroneControl_Path.zip" download>DroneControl_Path.zip</a><br>
 (please email me to get the unzip password. Thanks!)
 </p>
@@ -59,7 +76,7 @@ You can download the full project by:
 
 </main>
 
-<footer>Chun-Wei, Kong - November 25, 2020<br>
+<footer>Chun-Wei, Kong - December 25, 2020<br>
 	<a href="../index.html">home page</a>
 </footer>
 
