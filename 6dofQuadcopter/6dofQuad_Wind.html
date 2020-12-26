@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang = "en">
+<head>
+<meta charset="UTF-8">
+<title>(Wind)6 DOF Quadcoptor
+</title>
+</head>
+<body>
+<main>
+<h1>(Wind) 6-Dof Quadcoptor Simulation and Control
+</h1>
+
+<div>
+<h2>Introduction</h2>
+<p>
+This simulation models the wind disturbance. The purpose is to add in the real world effect. Using the concept in this model, users can further model other real world terms, for example sensor measuring noise and motor output fluctuation.
+<br>
+The wind disturbance is written in the [Force and Environment/ Wind disturb] block. Users can specify any WindLevel, Noise power, Wind sample time to see how the drone behaves under different condition.
+<br><br>
+Inside Force and Environment subsystem:<br>
+<img src = "Figures/EN_WD.png"><br>
+Inside Wind Disturb block: <br>
+<img src = "Figures/WD.png">
+</p>
+</div>
+
+<div>
+	<h2>Demo</h2><p>
+	WindLevel set from [0 1 5 8 10 11]. Under WindLevel 10, the drone can still stabilize itself, although at WindLevel = 10, the drone actually crashes because its Z position is negative. For WindLevel over 11, the drone can't stabilize anymore.
+<br>
+	<img src = "Figures/wind0.gif">
+	<img src = "Figures/wind1.gif">
+	<img src = "Figures/wind5.gif">
+	<img src = "Figures/wind8.gif">
+	<img src = "Figures/wind10.gif">
+	<img src = "Figures/wind11.gif">
+	</p>
+</div>
+
+<div>
+	<h2>Steps to Run this Project</h2>
+<ol>
+	<li>Set the initial values of the drone by running the script SetDroneControl_copt.m</li>
+	<li> Open the Simulink Model: DroneControl_WindPID.slx and run it.</li>
+	<li> Open the animation script: animation_direct.m and run it to see the result.</li>
+</ol>
+</div>
+
+<div>
+<h2>MATLAB Project Download Link</h2><p>
+Download new Version 2 project:
+<a href="DroneControl_WindPID.zip" download>DroneControl_WindPID.zip</a><br>
+(please email me to get the unzip password. Thanks!)
+</p>
+</div>
+
+</main>
+
+<footer>Chun-Wei, Kong - December 26, 2020<br>
+	<a href="../index.html">home page</a>
+</footer>
+
+</body>
+</html>
