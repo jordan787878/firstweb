@@ -34,19 +34,23 @@ Classic PID Controller Structure: take Z error and calculate Thrust command<br>
 
 <div>
 	<h2>Demo</h2><p>
-	WindLevel set from [2.5 5]. The wind is turn on after time = 3 sec.<br>
+	WindLevel set from [5 10]. The wind is turn on after time = 3 sec.<br>
 	Left: PID controller.  Right: DNN controller.<br>
-	DNN controller has little oscillation under different level of wind disturbance. While PID controller almost flies away at wind = 2.5, and it even crashes (touch the 0 Z position) at wind = 5. 
-	<br>
-	<img src = "Figures/PID_w2.5.gif" height = "500">
-	<img src = "Figures/DNN_w2.5.gif" height = "500">
+	DNN controller can hold its Z = 1 position, having little oscillation under different level of wind disturbance; its Z position varies only 10 % even at the highest wind disturbance. Although this PID controller is designed to reach a rise time as small as possible (0.25 sec), it still cannot hold its Z position. At Wind = 10 level, it moves atop to 2 meter and down to negatice Z position. 
 	<br>
 	<img src = "Figures/PID_w5.gif" height = "500">
         <img src = "Figures/DNN_w5.gif" height = "500">	
 	<br>
-	Z position and Thrust plot for Wind = 2.5.<br>
-	<img src = "Figures/Z_w2.5.png" height = "500">
-	<img src = "Figures/Thrust_w2.5.png" height = "500"><br>
+	<img src = "Figures/PID_w10.gif" height = "500">
+        <img src = "Figures/DNN_w10.gif" height = "500">
+	<br><br>
+	Z position and Thrust plot<br>
+	(No Wind) <br>
+	<img src = "Figures/Z_NoW.png" height= "400">
+	<img src = "Figures/Thrust_NoW.png" height = "400"><br>
+	(Wind = 10) <br>
+	<img src = "Figures/Z_W10.png" height = "400">
+        <img src = "Figures/Thrust_W10.png" height = "400"<br>
 	</p>
 </div>
 
