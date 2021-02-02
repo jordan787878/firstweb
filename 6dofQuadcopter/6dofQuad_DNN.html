@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang = "en">
+<head>
+<meta charset="UTF-8">
+<title>Neural Network Controller
+</title>
+</head>
+<body>
+<main>
+<h1>Neural Newtork Controller
+</h1>
+
+<div>
+        <h2>Introduction</h2>
+        <p>A classic PID controller uses combination of error, derivative of error, and integral of error to generate desired thrust command. It is a function that humans are likely to understand, design, and tune. Deep Neural Network is, at its core, a function approximater. Thus, it is possible to implement deep neural network to control a drone.<br>
+        This project demonstrates the implementation of deep neural network for the altitude control of the quadcopter. In a meantime, to showcase some of its advantages and disadvantages. 
+        </p>
+</div>
+
+
+<div>
+<h2>Project Overview</h2>
+<p>
+Use Reinforcement learning, Deep Neural Network, to control the Z position of the drone.<br>
+Compare the controller with the classic PID controller under different level of wind disturbance along z-axis. 
+<br><br>
+Deep Neural Network Controller Structure: take Z Position and Z Error as input, then directly output the Thrust command.
+<br>
+<img src = "Figures/DNN_IO.png"><br><br>
+Classic PID Controller Structure: take Z error and calculate Thrust command<br>
+<img src = "Figures/PID_IO.png"><br><br>
+</p>
+</div>
+
+<div>
+	<h2>Demo</h2><p>
+	WindLevel set from [2.5 5]. The wind is turn on after time = 3 sec.<br>
+	Left: PID controller.  Right: DNN controller.<br>
+	DNN controller has little oscillation under different level of wind disturbance. While PID controller almost flies away at wind = 2.5, and it even crashes (touch the 0 Z position) at wind = 5. 
+	<br>
+	<img src = "Figures/PID_w2.5.gif" height = "500">
+	<img src = "Figures/DNN_w2.5.gif" height = "500">
+	<br>
+	<img src = "Figures/PID_w5.gif" height = "500">
+        <img src = "Figures/DNN_w5.gif" height = "500">	
+	<br>
+	Z position and Thrust plot for Wind = 2.5.<br>
+	<img src = "Figures/Z_w2.5.png" height = "500">
+	<img src = "Figures/Thrust_w2.5.png" height = "500"><br>
+	</p>
+</div>
+
+<div>
+        <h2>Workflow</h2>
+	<img src = "Figures/DNN.png">
+        <ol>
+		<li> Decide observation states and action states <br>
+		<img src = "Figures/observe.png"></li>
+		<li> Decide the structure of the neural network. (CNN, RNN, and etc.)<br> <img src = "Figures/actor.png"> <img src = "Figures/critic.png"> </li>
+		<li> Design "appropriate" reward function. (This is the key step, since you have various structure to choose and different weight values to try)<br> <img src = "Figures/reward.png"></li>
+		<li> Train, if things don't go right, go back to 1,2 or 3 step and change something based on your "knowledge and experience". (The following animation shows how DNN learned from high frequency "bang-bang" thrust control to desired thrust control. See how different it is!)<br> <img src = "Figures/train.gif"></li>
+        </ol>
+</div>
+
+
+<div>
+	<h2>Advantages</h2>
+	<ol>
+		<li> DNN controller is much more responsive, resisting higher disturbance </li>
+		<li> DNN controller is likely to be used on different size, weight, and configuration of drone without re-tuning the PID gains.</li>
+		<li> DNN controller can use data from rich-sensors, for instance camera, lidar and etc.</li>
+	</ol>
+</div>
+
+<div>
+        <h2>Disadvantages</h2>
+        <ol>
+                <li> How to craft a reward function so that the DNN controller can learn as what we want it to do. (Although some say one of the advantage
+ of neural network is that it can learn itself, to me, I still need to monitor the training process to determine whether it is "learning along the right path".) </li>
+                <li> Training time and computing resources are enormous. (For this project, it requires 24 hour and 6 GB memory to train)</li>
+                <li> The generated command output might be impratical in real cases. (This project assumes using perfect motors that can track the thrust command perfectly. But to implement DNN controller in the real world, it is necessary to model the motor in the sametime)</li>  
+        </ol>
+</div>
+
+</main>
+
+<footer>Chun-Wei, Kong - Feburary 2, 2021<br>
+	<a href="../index.html">home page</a>
+</footer>
+
+</body>
+</html>
