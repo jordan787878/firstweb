@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang = "en">
+<head>
+<meta charset="UTF-8">
+<title>(Path)6 DOF Quadcoptor
+</title>
+</head>
+<body>
+<main>
+<h1>(Path) 6-Dof Quadcoptor Simulation and Control
+</h1>
+
+<div>
+<h2>Introduction</h2>
+<p>
+Instead of "following or surrounding" a moving target, this NEW MODE lets the drone to directly move in a specified path. I made this mode because of several reasons.</p>
+<ol>
+	<li>Some viewers ask me if the drone can fly in circular path, or curve. </li>
+	<li>I read a paper about Improved Fast Marching Method from my viewer, which focuses on finding the optimized path, so I think this NEW MODE can help a lot. </li>
+</ol>
+<p>In additon, considering the purpose of flying along a specified path, the camera axis (blue axis) should be better to point along the direction it is moving forward, so that it can sense obstacles. This is done by the Yaw Header function. <br>
+In general, the drone can fly in any path. Try it!</p>
+</div>
+
+<div>
+	<h2>Demo</h2><p>
+	<img src = "Figures/demo_path.gif">
+	<img src = "Figures/demo_path_2.gif"><br>
+	The drone can now fly along any specificed path. The camera axis (blue axis) will face toward the direction it is moving.<br>
+	By setting the path A matrix, the drone can fly in different speed. Left drone flies slower, and right drone flies faster.<br>
+	The right drone also hovers at [2,2,3] after t = 36 sec to show its stability.
+	</p>
+</div>
+
+<div>
+	<h2>Updates</h2>
+	<p>I made some changes to the Path model.</p>
+	<ol>
+		<li>I set the controller input and ouput signal rate to 0.01 sec.</li>
+		<li>I change the structure of X, Y, and Yaw controller. Instead of using a singal PD controller to transform the Ref. angle to Torque, I directly use the EulerRates as the input of derivative of angle. By doing so, it can reduce the noise of the Torque output signal, making it a more practical simulation. If you compare the new controller and the old ones, you can see that the Torque output of the old one has a lot of oscillation, which is impractical.</li>
+		<li>I provide an faster path (the path of the right drone) A_default matrix. You can double click it and load this path (the simpler process as the second step).</li>
+	</ol>
+</div>
+
+
+<div>
+	<h2>Steps to Run this Project</h2>
+<ol>
+	<li>Set the initial values of the drone by running the script SetDroneControl_copt.m<br>
+		<img src = "Figures/Set.png"></li>
+	<li>There are 2 ways to specify your path:
+		<ol>
+			<li> Specify by writing the equations of the path. Open GenerateA.m script, run the default path or write down your equations of path.<br> <img src = "Figures/GenerateA.png"> <img src = "Figures/Amatrix.png"> </li>
+			<li> If you have a complicated path that cannot be written by equations, load your (x,y,z) data points extracted from your complicated path into A matrix. Make sure you use enough data points to fit the complex path. </li>
+		</ol>
+	</li>
+	<li> Run the XYZsiganl_pathpts.m script to generate the Command signal, it will need the A matrix as input. <br>
+		<img src = "Figures/signal_path.png"></li>
+	<li> Open the New Simulink Model: DroneControl_Direct.slx and run it.<br>
+		<img src = "Figures/New_Path_Model.png"></li>
+	<li> Open the New animation script: animation_direct.m and run it to see the result.
+		<img src = "Figures/newanim.png"> <br> </li>
+
+</ol>
+</div>
+
+<div>
+<p>
+<b>MATLAB Project Download Link</b><br>
+The charge of this project file is <b>5 US dollars.</b> <br>
+First, download the project by the following link:
+<a href="DroneControl_Path.zip" download>DroneControl_Path.zip</a><br>
+Second, pay the charge by the following paypal link:
+<a href="https://paypal.me/jordan787878?locale.x=zh_TW" target="_blank">pay link</a><br>
+Finally, send an email to me: j2855001@gmail.com, with the title of the project's name. After the payment is confirmed on my side, I will send you the unzip password soon. Thank
+</p>
+</div>
+
+</main>
+
+<footer>Chun-Wei, Kong - Feb 22, 2021<br>
+	<a href="../index.html">home page</a>
+</footer>
+
+</body>
+</html>
