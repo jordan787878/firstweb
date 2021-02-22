@@ -42,26 +42,33 @@ Takeoff flag: now I use clock + Takeoff time to set the takeoff flag.<br>
 
 <b>Command Matrix and Animation</b><br>
 <ol>
-	<li>Set the initial values of the drone by running the script, SetDroneControl.m<br>
+	<li>Set the initial values of the drone by running the %% Setup Drone section in SetDroneControl.m<br>
 		<img src = "Figures/SetDrone.png"></li>
-	<li>Load the DroneSignal_square.mat file to get the WayPts matrix.<br>
+	<li>Use the form of [x,y,z,t] matrix to define the waypoints for the moving target, by running the %% Waypoints for drone section in XYZsignal.m. (you can obtain the WayPts by loading the pre-built waypoint from DroneSignal_movingtarget.mat file)<br>
 <img src = "Figures/WayPts.png">
 <img src = "Figures/WayPts_prebuilt.png"></li>
-	<li>Run the XYZsignal script to generate the actual command that will later be the input of the drone simulink model<br>
+	<li>Run the %% Generate signals section in XYZsignal.m to extrapolate the signals.<br>
 		<img src = "Figures/GenerateSignals.png"></li>
 	<li>Run the simulation of DroneControl.slx</li>
-	<li>Run the script, animation.m to visualize the result<br>
+	<li>Run the %% Simulink 3D Animation with Moving Target section in animation.m<br>
 		<img src = "Figures/Animation.png"></li>
 </ol>
 
+<div>
 <p>
 <b>MATLAB Project Download Link</b><br>
-You can download the full project by:
-<a href="DroneControl_download.zip" download>DroneControl_download.zip</a><br>
-(please email me to get the unzip password. Thanks!)
+The charge of this project file is <b>5 US dollars.</b> <br>
+First, download the project by the following link: 
+<a href="DroneControl.zip" download>DroneControl.zip</a><br>
+Second, pay the charge by the following paypal link:
+<a href="https://paypal.me/jordan787878?locale.x=zh_TW" target="_blank">pay link</a><br>
+Finally, send an email to me: j2855001@gmail.com, with the title of the project's name. After the payment is confirmed on my side, I will send you the unzip password soon. Thank
 </p>
+</div>
+
+
 </main>
-<footer>Chun-Wei, Kong - August 27, 2020<br>
+<footer>Chun-Wei, Kong - Feb 22, 2021<br>
 	<a href="../index.html">home page</a>
 </footer>
 </body>
