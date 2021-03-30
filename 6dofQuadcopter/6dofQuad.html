@@ -57,21 +57,125 @@ Takeoff flag: now I use clock + Takeoff time to set the takeoff flag.<br>
 <div>
 <p>
 <b>MATLAB Project Download Link</b><br>
-The charge of this project file is <b>2 US dollars.</b> <br>
-If you want to get this project, it's simple!<br>
-First send an email to me: j2855001@gmail.com, with the title of the project's name. I will send you the zip file of the project to check<br>
-Second, pay the charge by the following paypal link:
-<a href="https://paypal.me/jordan787878?locale.x=zh_TW" target="_blank">pay link</a><br>
-Finally, after the payment is confirmed on my side, I will send you the unzip password soon. Thanks.<br>
-<b>NOTICE</b>: Do not transfer the zip file and password to others.<br> 
-&copy; Copyright 2021 Chun-Wei, Kong. All Rights Reserved.
-
+You can download the project by the following link: <a href="DroneControl.zip" download>Project download link</a><br>
+The unzip password is:79799172.
+If you want to support me for doing this work, sponsor me by the following paypal link:
+<a href="https://paypal.me/jordan787878?locale.x=zh_TW" target="_blank">sponsor link </a>Thanks! And
+feel free to contact me via my email: j2855001@gmail.com, if you have any problems.
 </p>
 </div>
 
+<div id="smart-button-container">
+    <div style="text-align: center"><label for="description">Sponsor </label><input type="text" name="descriptionInput" id="description" maxlength="127" value=""></div>
+      <p id="descriptionError" style="visibility: hidden; color:red; text-align: center;">Please enter a description</p>
+    <div style="text-align: center"><label for="amount">Sponsorship Amount </label><input name="amountInput" type="number" id="amount" value="" ><span> USD</span></div>
+      <p id="priceLabelError" style="visibility: hidden; color:red; text-align: center;">Please enter a price</p>
+    <div id="invoiceidDiv" style="text-align: center; display: none;"><label for="invoiceid"> </label><input name="invoiceid" maxlength="127" type="text" id="invoiceid" value="" ></div>
+      <p id="invoiceidError" style="visibility: hidden; color:red; text-align: center;">Please enter an Invoice ID</p>
+    <div style="text-align: center; margin-top: 0.625rem;" id="paypal-button-container"></div>
+  </div>
+  <script src="https://www.paypal.com/sdk/js?client-id=sb&currency=USD" data-sdk-integration-source="button-factory"></script>
+  <script>
+  function initPayPalButton() {
+    var description = document.querySelector('#smart-button-container #description');
+    var amount = document.querySelector('#smart-button-container #amount');
+    var descriptionError = document.querySelector('#smart-button-container #descriptionError');
+    var priceError = document.querySelector('#smart-button-container #priceLabelError');
+    var invoiceid = document.querySelector('#smart-button-container #invoiceid');
+    var invoiceidError = document.querySelector('#smart-button-container #invoiceidError');
+    var invoiceidDiv = document.querySelector('#smart-button-container #invoiceidDiv');
+
+    var elArr = [description, amount];
+
+    if (invoiceidDiv.firstChild.innerHTML.length > 1) {
+      invoiceidDiv.style.display = "block";
+    }
+
+    var purchase_units = [];
+    purchase_units[0] = {};
+    purchase_units[0].amount = {};
+
+    function validate(event) {
+      return event.value.length > 0;
+    }
+
+    paypal.Buttons({
+      style: {
+        color: 'gold',
+        shape: 'rect',
+        label: 'paypal',
+        layout: 'vertical',
+        
+      },
+
+      onInit: function (data, actions) {
+        actions.disable();
+
+        if(invoiceidDiv.style.display === "block") {
+          elArr.push(invoiceid);
+        }
+
+        elArr.forEach(function (item) {
+          item.addEventListener('keyup', function (event) {
+            var result = elArr.every(validate);
+            if (result) {
+              actions.enable();
+            } else {
+              actions.disable();
+            }
+          });
+        });
+      },
+
+      onClick: function () {
+        if (description.value.length < 1) {
+          descriptionError.style.visibility = "visible";
+        } else {
+          descriptionError.style.visibility = "hidden";
+        }
+
+        if (amount.value.length < 1) {
+          priceError.style.visibility = "visible";
+        } else {
+          priceError.style.visibility = "hidden";
+        }
+
+        if (invoiceid.value.length < 1 && invoiceidDiv.style.display === "block") {
+          invoiceidError.style.visibility = "visible";
+        } else {
+          invoiceidError.style.visibility = "hidden";
+        }
+
+        purchase_units[0].description = description.value;
+        purchase_units[0].amount.value = amount.value;
+
+        if(invoiceid.value !== '') {
+          purchase_units[0].invoice_id = invoiceid.value;
+        }
+      },
+
+      createOrder: function (data, actions) {
+        return actions.order.create({
+          purchase_units: purchase_units,
+        });
+      },
+
+      onApprove: function (data, actions) {
+        return actions.order.capture().then(function (details) {
+          alert('Transaction completed by ' + details.payer.name.given_name + '!');
+        });
+      },
+
+      onError: function (err) {
+        console.log(err);
+      }
+    }).render('#paypal-button-container');
+  }
+  initPayPalButton();
+  </script>
 
 </main>
-<footer>Chun-Wei, Kong - Feb 22, 2021<br>
+<footer>Chun-Wei, Kong - Mar 30, 2021<br>
 	<a href="../index.html">home page</a>
 </footer>
 </body>
